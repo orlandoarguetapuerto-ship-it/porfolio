@@ -506,7 +506,7 @@
       <!-- IMAGE AREA -->
       <div style="flex:1;position:relative;background:#111110;overflow:hidden;min-width:0;">
         <img id="lbImg" src="" alt=""
-          style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;object-position:center center;opacity:0;transition:opacity 0.25s;background:#111110;">
+          style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;object-position:center center;background:#111110;">
 
         <!-- Prev arrow -->
         <button id="lbPrev" onclick="event.stopPropagation();goSlide(currentSlide-1)"
@@ -545,9 +545,13 @@
           <div id="lbTags" style="display:flex;flex-wrap:wrap;gap:0.35rem;"></div>
         </div>
 
-        <!-- Navigation hint -->
-        <div style="padding:1.25rem 1.75rem;border-top:1px solid rgba(255,255,255,0.06);">
-          <p style="font-size:0.68rem;color:rgba(255,255,255,0.2);letter-spacing:0.04em;line-height:1.6;margin:0;">Use arrow keys ← → to navigate pages · Esc to close</p>
+        <!-- Download button + Navigation hint -->
+        <div style="padding:1.25rem 1.75rem;border-top:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;gap:0.75rem;">
+          <button id="lbDownloadBtn" onclick="downloadProject()" style="width:100%;padding:0.65rem 1rem;background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-family:'DM Sans',sans-serif;font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.5)';this.style.color='#fff'" onmouseout="this.style.borderColor='rgba(255,255,255,0.2)';this.style.color='rgba(255,255,255,0.7)'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download all pages
+          </button>
+          <p style="font-size:0.65rem;color:rgba(255,255,255,0.2);letter-spacing:0.04em;line-height:1.6;margin:0;">Arrow keys ← → · Esc to close</p>
         </div>
       </div>
 
@@ -836,7 +840,11 @@ function updateCarousel() {
   if (!currentProject) return;
   const imgs = PROJECT_IMGS[currentProject.id] || [];
   const total = imgs.length;
-  
+
+  // SET THE IMAGE SRC
+  const el = document.getElementById('lbImg');
+  el.src = imgs[currentSlide] || '';
+
   document.getElementById('lbCounter').textContent = total > 1 ? `${currentSlide + 1} / ${total}` : '';
   document.getElementById('lbPrev').style.display = total > 1 ? 'flex' : 'none';
   document.getElementById('lbNext').style.display = total > 1 ? 'flex' : 'none';
@@ -881,6 +889,60 @@ document.getElementById('filterBar').addEventListener('click', e => {
   btn.classList.add('active');
   renderCards(btn.dataset.filter);
 });
+
+
+// Download all pages of current project as individual JPGs in a zip
+async function downloadProject() {
+  if (!currentProject) return;
+  const btn = document.getElementById('lbDownloadBtn');
+  const urls = PROJECT_IMGS[currentProject.id] || [];
+  const name = currentProject.title.replace(/[^a-zA-Z0-9 ]/g, '').trim();
+
+  btn.textContent = 'Preparing download...';
+  btn.disabled = true;
+
+  try {
+    // Load JSZip dynamically
+    if (typeof JSZip === 'undefined') {
+      await new Promise((res, rej) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+        s.onload = res; s.onerror = rej;
+        document.head.appendChild(s);
+      });
+    }
+
+    const zip = new JSZip();
+    const folder = zip.folder(name);
+
+    for (let i = 0; i < urls.length; i++) {
+      btn.textContent = `Downloading ${i+1}/${urls.length}...`;
+      const resp = await fetch(urls[i]);
+      if (!resp.ok) throw new Error('Failed to fetch image ' + (i+1));
+      const blob = await resp.blob();
+      folder.file(`${name}_page-${String(i+1).padStart(2,'0')}.jpg`, blob);
+    }
+
+    btn.textContent = 'Creating ZIP...';
+    const zipBlob = await zip.generateAsync({type:'blob'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(zipBlob);
+    a.download = name + '.zip';
+    a.click();
+    URL.revokeObjectURL(a.href);
+
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Downloaded!';
+    setTimeout(() => {
+      btn.innerHTML = '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" y1=\"15\" x2=\"12\" y2=\"3\"/></svg> Download all pages';
+      btn.disabled = false;
+    }, 3000);
+
+  } catch(e) {
+    btn.textContent = 'Download failed — try again';
+    btn.disabled = false;
+    console.error(e);
+  }
+}
 
 try {
   renderCards('all');
