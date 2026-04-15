@@ -506,7 +506,8 @@
       <!-- IMAGE AREA -->
       <div style="flex:1;position:relative;background:#111110;overflow:hidden;min-width:0;">
         <img id="lbImg" src="" alt=""
-          style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;object-position:center center;background:#111110;">
+          onclick="event.stopPropagation();toggleZoom()"
+          style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;object-position:center center;background:#111110;cursor:zoom-in;">
 
         <!-- Prev arrow -->
         <button id="lbPrev" onclick="event.stopPropagation();goSlide(currentSlide-1)"
@@ -876,11 +877,7 @@ function closeLB() {
   currentProject = null;
 }
 
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeLB();
-  if (e.key === 'ArrowRight') goSlide(currentSlide + 1);
-  if (e.key === 'ArrowLeft') goSlide(currentSlide - 1);
-});
+// Keyboard handled in zoom section below
 
 document.getElementById('filterBar').addEventListener('click', e => {
   const btn = e.target.closest('.filter-btn');
@@ -954,6 +951,133 @@ try {
 // iOS Safari: ensure lightbox scroll works
 const lbInnerEl = document.querySelector('#lightbox .lb-inner') || document.querySelector('#lightbox > div > div');
 if (lbInnerEl) lbInnerEl.style['-webkit-overflow-scrolling'] = 'touch';
+
+// ---- ZOOM OVERLAY ----
+// Create fullscreen zoom overlay
+const zoomOverlay = document.createElement('div');
+zoomOverlay.id = 'zoomOverlay';
+zoomOverlay.style.cssText = 'display:none;position:fixed;inset:0;z-index:99999;background:#0a0a0a;cursor:zoom-out;overflow:auto;-webkit-overflow-scrolling:touch;';
+zoomOverlay.innerHTML = `
+  <div id="zoomImgWrap" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:0;">
+    <img id="zoomImg" src="" alt="" style="max-width:100%;max-height:100vh;object-fit:contain;display:block;" />
+  </div>
+  <button id="zoomClose" style="position:fixed;top:16px;right:16px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:100000;">&#x2715;</button>
+  <div id="zoomControls" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100000;">
+    <button id="zoomFit" style="padding:8px 16px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;font-size:12px;cursor:pointer;border-radius:4px;font-family:'DM Sans',sans-serif;letter-spacing:0.05em;">Fit to Screen</button>
+    <button id="zoomFull" style="padding:8px 16px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;font-size:12px;cursor:pointer;border-radius:4px;font-family:'DM Sans',sans-serif;letter-spacing:0.05em;">Full Size</button>
+  </div>
+  <button id="zoomPrev" style="position:fixed;left:20px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;width:48px;height:48px;border-radius:50%;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:100000;">&#8249;</button>
+  <button id="zoomNext" style="position:fixed;right:20px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;width:48px;height:48px;border-radius:50%;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:100000;">&#8250;</button>
+  <span id="zoomCounter" style="position:fixed;bottom:22px;left:24px;font-size:0.75rem;color:rgba(255,255,255,0.5);letter-spacing:0.08em;font-family:'DM Sans',sans-serif;z-index:100000;"></span>
+`;
+document.body.appendChild(zoomOverlay);
+
+let zoomIsFullSize = false;
+
+function toggleZoom() {
+  if (!currentProject) return;
+  const imgs = PROJECT_IMGS[currentProject.id] || [];
+  const total = imgs.length;
+
+  zoomOverlay.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  zoomIsFullSize = false;
+  updateZoomImage();
+
+  document.getElementById('zoomPrev').style.display = total > 1 ? 'flex' : 'none';
+  document.getElementById('zoomNext').style.display = total > 1 ? 'flex' : 'none';
+  document.getElementById('zoomCounter').textContent = total > 1 ? `${currentSlide + 1} / ${total}` : '';
+}
+
+function updateZoomImage() {
+  const imgs = PROJECT_IMGS[currentProject.id] || [];
+  const zImg = document.getElementById('zoomImg');
+  zImg.src = imgs[currentSlide] || '';
+  const total = imgs.length;
+  document.getElementById('zoomCounter').textContent = total > 1 ? `${currentSlide + 1} / ${total}` : '';
+
+  if (zoomIsFullSize) {
+    zImg.style.maxWidth = 'none';
+    zImg.style.maxHeight = 'none';
+    zImg.style.width = 'auto';
+    zImg.style.height = 'auto';
+    zoomOverlay.style.cursor = 'grab';
+  } else {
+    zImg.style.maxWidth = '100%';
+    zImg.style.maxHeight = '100vh';
+    zImg.style.width = '';
+    zImg.style.height = '';
+    zoomOverlay.style.cursor = 'zoom-out';
+  }
+  zoomOverlay.scrollTop = 0;
+  zoomOverlay.scrollLeft = 0;
+}
+
+function closeZoom() {
+  zoomOverlay.style.display = 'none';
+  if (document.getElementById('lightbox').style.display !== 'none') {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = '';
+  }
+}
+
+document.getElementById('zoomClose').addEventListener('click', e => { e.stopPropagation(); closeZoom(); });
+zoomOverlay.addEventListener('click', e => {
+  if (e.target === zoomOverlay || e.target === document.getElementById('zoomImgWrap')) closeZoom();
+});
+document.getElementById('zoomImg').addEventListener('click', e => { e.stopPropagation(); closeZoom(); });
+
+document.getElementById('zoomPrev').addEventListener('click', e => {
+  e.stopPropagation();
+  const imgs = PROJECT_IMGS[currentProject.id] || [];
+  currentSlide = (currentSlide - 1 + imgs.length) % imgs.length;
+  updateZoomImage();
+  updateCarousel();
+});
+document.getElementById('zoomNext').addEventListener('click', e => {
+  e.stopPropagation();
+  const imgs = PROJECT_IMGS[currentProject.id] || [];
+  currentSlide = (currentSlide + 1) % imgs.length;
+  updateZoomImage();
+  updateCarousel();
+});
+
+document.getElementById('zoomFit').addEventListener('click', e => {
+  e.stopPropagation();
+  zoomIsFullSize = false;
+  updateZoomImage();
+});
+document.getElementById('zoomFull').addEventListener('click', e => {
+  e.stopPropagation();
+  zoomIsFullSize = true;
+  updateZoomImage();
+});
+
+// Override keyboard handler to also work in zoom mode
+document.removeEventListener('keydown', arguments.callee);
+document.addEventListener('keydown', e => {
+  if (zoomOverlay.style.display !== 'none') {
+    if (e.key === 'Escape') closeZoom();
+    if (e.key === 'ArrowRight') {
+      const imgs = PROJECT_IMGS[currentProject.id] || [];
+      currentSlide = (currentSlide + 1) % imgs.length;
+      updateZoomImage();
+      updateCarousel();
+    }
+    if (e.key === 'ArrowLeft') {
+      const imgs = PROJECT_IMGS[currentProject.id] || [];
+      currentSlide = (currentSlide - 1 + imgs.length) % imgs.length;
+      updateZoomImage();
+      updateCarousel();
+    }
+    return;
+  }
+  if (document.getElementById('lightbox').style.display === 'none') return;
+  if (e.key === 'Escape') closeLB();
+  if (e.key === 'ArrowRight') goSlide(currentSlide + 1);
+  if (e.key === 'ArrowLeft') goSlide(currentSlide - 1);
+});
 </script>
 </body>
 </html>
