@@ -163,6 +163,31 @@
   #lbImg { width: 100%; display: block; max-height: 58vh; object-fit: contain; object-position: top center; background: #F7F4EE; }
   .lb-meta { padding: 1.5rem 2rem 2rem; }
 
+  /* QUOTE MODAL */
+  #quoteModal { display:none; position:fixed; inset:0; z-index:10000; background:rgba(26,25,22,0.85); align-items:center; justify-content:center; padding:1.5rem; }
+  #quoteModal.open { display:flex; }
+  .quote-inner { background:var(--accent); color:#fff; max-width:620px; width:100%; max-height:92vh; overflow-y:auto; border-radius:4px; position:relative; }
+  .quote-header { padding:2rem 2.5rem 1.5rem; border-bottom:1px solid rgba(255,255,255,0.12); }
+  .quote-header h3 { font-family:var(--serif); font-size:1.6rem; color:#fff; margin-bottom:0.35rem; }
+  .quote-header p { font-size:0.85rem; color:rgba(255,255,255,0.6); line-height:1.5; }
+  .quote-close { position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; width:32px; height:32px; border-radius:50%; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .quote-body { padding:1.5rem 2.5rem 2rem; }
+  .q-field { margin-bottom:1.25rem; }
+  .q-label { display:block; font-size:0.72rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.55); margin-bottom:0.4rem; }
+  .q-input { width:100%; padding:0.6rem 0.75rem; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); border-radius:3px; color:#fff; font-family:var(--sans); font-size:0.88rem; outline:none; transition:border-color 0.2s; }
+  .q-input:focus { border-color:rgba(255,255,255,0.5); }
+  .q-input::placeholder { color:rgba(255,255,255,0.3); }
+  .q-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  .q-checks { display:flex; flex-wrap:wrap; gap:0.4rem; }
+  .q-check { display:flex; align-items:center; gap:0.4rem; cursor:pointer; }
+  .q-check input[type="checkbox"] { accent-color:#fff; width:15px; height:15px; cursor:pointer; }
+  .q-check span { font-size:0.82rem; color:rgba(255,255,255,0.8); }
+  .q-submit { width:100%; padding:0.75rem; background:#fff; color:var(--accent); border:none; border-radius:3px; font-family:var(--sans); font-size:0.88rem; font-weight:500; letter-spacing:0.04em; cursor:pointer; transition:opacity 0.2s; margin-top:0.5rem; }
+  .q-submit:hover { opacity:0.9; }
+  .q-note { font-size:0.72rem; color:rgba(255,255,255,0.35); text-align:center; margin-top:1rem; line-height:1.5; }
+  textarea.q-input { min-height:70px; resize:vertical; }
+  @media (max-width:600px) { .q-row { grid-template-columns:1fr; } .quote-header, .quote-body { padding-left:1.5rem; padding-right:1.5rem; } }
+
   /* RESPONSIVE */
   @media (max-width: 900px) {
     .hero { grid-template-columns: 1fr; }
@@ -177,6 +202,7 @@
     nav { padding: 0 1.5rem; }
     .nav-links { gap: 1.25rem; }
     footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    #testimonials .container > div:last-child { grid-template-columns: 1fr !important; }
   }
   @media (max-width: 560px) {
     #portfolioGrid { grid-template-columns: 1fr; }
@@ -276,10 +302,10 @@
 <nav>
   <a href="#" class="nav-logo">O. Argueta</a>
   <ul class="nav-links">
-    <li><a href="#about">About</a></li>
     <li><a href="#services">Services</a></li>
     <li><a href="#how-it-works">Process</a></li>
     <li><a href="#portfolio">Work</a></li>
+    <li><a href="#about">Why Me</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
@@ -287,67 +313,31 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-left">
-    <p class="hero-eyebrow">As-Built Survey Documentation</p>
-    <h1 class="hero-title">Precision drafting<br>for <em>commercial</em><br>spaces.</h1>
-    <p class="hero-desc">AutoCAD &amp; Revit specialist with hands-on experience producing as-built documentation for major U.S. retail, banking, and commercial clients. Remote-ready, U.S. time zone aligned.</p>
+    <p class="hero-eyebrow">As-Built Surveys &amp; CAD Drafting</p>
+    <h1 class="hero-title">Construction-ready<br>drawings, <em>delivered<br>in 4 days.</em></h1>
+    <p class="hero-desc">As-built surveys and CAD plans for U.S. contractors, A&amp;E firms, and project managers. Accurate floor plans, electrical, RCP, and HVAC documentation — fewer revisions, faster turnaround, ready for construction.</p>
     <div class="hero-cta">
-      <a href="#portfolio" class="btn-primary">View Work</a>
-      <a href="#contact" class="btn-outline">Get in Touch</a>
+      <a href="#" class="btn-primary" onclick="event.preventDefault();openQuote()">Get a Quote</a>
+      <a href="#portfolio" class="btn-outline">View Work</a>
     </div>
   </div>
   <div class="hero-right">
     <div class="stats-grid">
       <div class="stat-item">
         <div class="stat-num">85+</div>
-        <div class="stat-label">Projects completed<br>in the last 12 months</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">3</div>
-        <div class="stat-label">Years of professional<br>drafting experience</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">10+</div>
-        <div class="stat-label">National clients including<br>banking &amp; retail</div>
+        <div class="stat-label">Projects delivered<br>in the last 12 months</div>
       </div>
       <div class="stat-item">
         <div class="stat-num">4</div>
-        <div class="stat-label">Business-day delivery<br>for full sets under 5,000 sqft</div>
+        <div class="stat-label">Business-day delivery<br>for sets under 5,000 sqft</div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ABOUT -->
-<section id="about">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-number">01</span>
-      <h2 class="section-title">About</h2>
-    </div>
-    <div class="about-grid">
-      <div class="about-text">
-        <p>I'm a CAD drafter based in Honduras, specializing in <strong>as-built survey documentation</strong> for U.S. commercial properties. Over the past year I've produced floor plans, electrical plans, and reflected ceiling plans for some of the most recognized names in U.S. retail, banking, and financial services.</p>
-        <p>My work sits at the intersection of field data and final deliverable — taking survey measurements, point cloud data, photos, and sketches and transforming them into clean, accurate, production-ready drawings that meet U.S. industry standards.</p>
-        <p>I operate remotely in the Central Standard Time zone, which means real-time collaboration with U.S.-based project managers and teams, without the overhead of a domestic hire.</p>
+      <div class="stat-item">
+        <div class="stat-num">50%</div>
+        <div class="stat-label">Lower cost vs.<br>U.S.-based drafters</div>
       </div>
-      <div>
-        <p class="tools-label">Tools</p>
-        <ul class="skills-list">
-          <li class="skill-item"><span class="skill-name">Autodesk AutoCAD</span><span class="skill-tag">Primary</span></li>
-          <li class="skill-item"><span class="skill-name">Autodesk Revit</span><span class="skill-tag">Primary</span></li>
-          <li class="skill-item"><span class="skill-name">Matterport</span><span class="skill-tag">Point cloud</span></li>
-          <li class="skill-item"><span class="skill-name">NavVis</span><span class="skill-tag">Point cloud</span></li>
-        </ul>
-        <div class="why-box">
-          <p class="why-title">Benefits of working with me</p>
-          <ul class="why-list">
-            <li class="why-item">CST timezone — 100% compatible with the U.S. market</li>
-            <li class="why-item">50% lower cost compared to U.S.-based drafters</li>
-            <li class="why-item">Full set delivered in 4 business days for projects under 5,000 sqft</li>
-            <li class="why-item">Banking &amp; retail specialization — not generic drafting</li>
-            <li class="why-item">Direct communication, no middleman</li>
-          </ul>
-        </div>
+      <div class="stat-item">
+        <div class="stat-num">CST</div>
+        <div class="stat-label">U.S. time zone aligned<br>real-time collaboration</div>
       </div>
     </div>
   </div>
@@ -357,7 +347,7 @@
 <section id="services">
   <div class="container">
     <div class="section-header">
-      <span class="section-number">02</span>
+      <span class="section-number">01</span>
       <h2 class="section-title">Services</h2>
     </div>
     <div class="services-grid">
@@ -365,7 +355,7 @@
       <div class="service-card">
         <span class="service-num">001</span>
         <h3 class="service-name">A&amp;E Site Survey — Full Set</h3>
-        <p class="service-desc">Complete as-built documentation package including a cover sheet, floor plan, electrical plan, and reflected ceiling plan. The cover sheet documents utility service locations — electric meter, gas meter, water meter — plus any relevant site information. The standard deliverable for commercial retail and banking spaces.</p>
+        <p class="service-desc">Everything your project needs in one package: cover sheet, floor plan, electrical plan, and reflected ceiling plan. Reduces errors on-site, eliminates back-and-forth, and gives your team construction-ready drawings from day one.</p>
         <div class="service-price">Starting at $500</div>
         <div class="service-deliverable">Cover Sheet + Floor Plan + Electrical + RCP · DWG + PDF · 4 business days</div>
       </div>
@@ -373,52 +363,51 @@
       <div class="service-card">
         <span class="service-num">002</span>
         <h3 class="service-name">Floor Plan + Cover Sheet</h3>
-        <p class="service-desc">As-built floor plan plus a cover sheet documenting utility service locations — electric meter, gas meter, water meter — and any other relevant site information. Ideal for space planning, permit documentation, or standalone survey deliverables.</p>
+        <p class="service-desc">Clean, accurate floor plan with a cover sheet documenting utility locations. Ideal for space planning, permit documentation, or when you need a standalone deliverable fast.</p>
         <div class="service-price">Starting at $375</div>
+        <div class="service-deliverable">Floor Plan + Cover Sheet · DWG + PDF · 3 business days</div>
       </div>
 
       <div class="service-card">
         <span class="service-num">003</span>
         <h3 class="service-name">Electrical Plan</h3>
-        <p class="service-desc">As-built electrical documentation showing panel locations, outlet placement, lighting circuits, and all visible electrical elements captured during the field survey.</p>
+        <p class="service-desc">Panel locations, outlet placement, lighting circuits — all documented clearly so your electrician can work without guesswork. Saves time during review and reduces change orders.</p>
         <div class="service-price">Starting at $115</div>
       </div>
 
       <div class="service-card">
         <span class="service-num">004</span>
         <h3 class="service-name">Reflected Ceiling Plan</h3>
-        <p class="service-desc">Detailed ceiling documentation including grid layout, light fixture types and placement, HVAC diffusers, sprinkler heads, and ceiling height notation.</p>
+        <p class="service-desc">Grid layout, light fixtures, HVAC diffusers, sprinkler heads, and ceiling heights — everything your contractor needs to avoid surprises above the grid.</p>
         <div class="service-price">Starting at $115</div>
       </div>
 
       <div class="service-card">
         <span class="service-num">005</span>
         <h3 class="service-name">HVAC Plan</h3>
-        <p class="service-desc">As-built HVAC documentation showing ductwork layout, supply and return diffuser locations, equipment schedules, and unit tags. Available in 2D (AutoCAD) or 3D (Revit) depending on project requirements.</p>
+        <p class="service-desc">Ductwork layout, supply/return diffuser locations, equipment schedules, and unit tags. Available in 2D (AutoCAD) or 3D (Revit). Clear documentation that keeps your mechanical team on track.</p>
         <div class="service-price">Starting at $115</div>
       </div>
 
       <div class="service-card">
         <span class="service-num">006</span>
-        <h3 class="service-name">Also available</h3>
-        <p class="service-desc">Interior and exterior elevations, site plans with topographic elevation points, and other specialized as-built deliverables. Scope and pricing vary by project — please get in touch for a custom quote.</p>
-        <div class="service-contact">Contact us for pricing →</div>
+        <h3 class="service-name">Elevations &amp; Site Plans</h3>
+        <p class="service-desc">Interior and exterior elevations, site plans with topographic elevation points, and other specialized as-built deliverables. Scope and pricing vary by project.</p>
+        <div class="service-contact">Contact for pricing →</div>
       </div>
 
       <div class="service-card">
         <span class="service-num">007</span>
         <h3 class="service-name">Large Format Survey</h3>
-        <p class="service-desc">Full as-built package for larger commercial spaces above 5,000 sqft — multi-tenant buildings, flagship retail, and complex banking environments. Scope and timeline are defined per project.</p>
-        <div class="service-contact">Contact us for pricing →</div>
+        <p class="service-desc">Full as-built packages for spaces above 5,000 sqft — multi-tenant buildings, flagship retail, and complex banking environments. Custom scope and timeline.</p>
+        <div class="service-contact">Contact for pricing →</div>
       </div>
 
-      <div class="service-card">
-        <span class="service-num">008</span>
-        <h3 class="service-name">Full-Time Position</h3>
-        <p class="service-desc">Available for a permanent remote drafting position with the right firm. If you need dedicated, consistent drafting capacity integrated into your team on a long-term basis, I'm open to that conversation — provided the role comes with a formal employment contract and a monthly compensation of $2,300 USD.</p>
-        <div class="service-price">$2,300 / month · Permanent contract required</div>
-      </div>
-
+    </div>
+    <!-- Mid-page CTA -->
+    <div style="text-align:center;margin-top:3rem;padding-top:2.5rem;border-top:1px solid var(--rule);">
+      <p style="font-family:var(--serif);font-size:1.25rem;color:var(--ink);margin-bottom:1rem;">Ready to get started?</p>
+      <a href="#" class="btn-primary" onclick="event.preventDefault();openQuote()">Get a Quote</a>
     </div>
   </div>
 </section>
@@ -427,7 +416,7 @@
 <section id="how-it-works">
   <div class="container">
     <div class="section-header">
-      <span class="section-number">03</span>
+      <span class="section-number">02</span>
       <h2 class="section-title">How It Works</h2>
     </div>
     <div class="steps-grid">
@@ -485,7 +474,7 @@
 <section id="portfolio">
   <div class="container">
     <div class="section-header">
-      <span class="section-number">04</span>
+      <span class="section-number">03</span>
       <h2 class="section-title">Selected Work</h2>
     </div>
     <div class="filter-bar" id="filterBar">
@@ -559,11 +548,95 @@
     </div>
   </div>
 </section>
+
+<!-- WHY WORK WITH ME -->
+<section id="about">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">04</span>
+      <h2 class="section-title">Why Work With Me</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p><strong>From survey to final plans, I help you deliver accurate, construction-ready drawings faster and with fewer revisions.</strong></p>
+        <p>I specialize in as-built survey documentation for U.S. commercial properties — banking branches, retail stores, medical facilities, and specialty spaces. My experience includes work with <strong>Trileaf Corporation</strong> and documentation for national brands across the U.S.</p>
+        <p>I take survey measurements, point cloud data, photos, and field sketches and transform them into clean, production-ready drawings that meet U.S. industry standards. Every deliverable is built for construction — not just for filing.</p>
+        <p>Operating from the Central Standard Time zone means real-time collaboration with your U.S.-based team, without the overhead of a domestic hire.</p>
+      </div>
+      <div>
+        <p class="tools-label">Why clients choose me</p>
+        <ul class="skills-list">
+          <li class="skill-item"><span class="skill-name">International experience with U.S. firms</span><span class="skill-tag">Trileaf Corp.</span></li>
+          <li class="skill-item"><span class="skill-name">4-day turnaround for spaces under 5K sqft</span><span class="skill-tag">Fast</span></li>
+          <li class="skill-item"><span class="skill-name">50% lower cost vs. U.S.-based drafters</span><span class="skill-tag">Value</span></li>
+          <li class="skill-item"><span class="skill-name">CST timezone — U.S. hours, direct communication</span><span class="skill-tag">Aligned</span></li>
+          <li class="skill-item"><span class="skill-name">Banking &amp; retail specialization</span><span class="skill-tag">Focused</span></li>
+        </ul>
+
+        <p class="tools-label" style="margin-top:2rem;">Tools</p>
+        <ul class="skills-list">
+          <li class="skill-item"><span class="skill-name">Autodesk AutoCAD</span><span class="skill-tag">Primary</span></li>
+          <li class="skill-item"><span class="skill-name">Autodesk Revit</span><span class="skill-tag">Primary</span></li>
+          <li class="skill-item"><span class="skill-name">Matterport</span><span class="skill-tag">Point cloud</span></li>
+          <li class="skill-item"><span class="skill-name">NavVis</span><span class="skill-tag">Point cloud</span></li>
+          <li class="skill-item"><span class="skill-name">Cloud to BIM</span><span class="skill-tag">Point cloud</span></li>
+          <li class="skill-item"><span class="skill-name">CloudCompare</span><span class="skill-tag">Point cloud</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" style="background:var(--cream);">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">05</span>
+      <h2 class="section-title">What Clients Say</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem;">
+      <div style="background:var(--white);border:1px solid var(--rule);padding:2rem;">
+        <p style="font-size:0.88rem;color:var(--ink-muted);line-height:1.75;margin-bottom:1.25rem;font-style:italic;">"We threw a batch of 6 bank branches at Orlando on a tight deadline and honestly didn't expect them all back on time. Every single set came in clean and ready to go. He's our go-to now whenever the queue backs up."</p>
+        <div style="border-top:1px solid var(--rule);padding-top:1rem;">
+          <p style="font-size:0.85rem;font-weight:500;color:var(--ink);margin-bottom:0.15rem;">Project Manager</p>
+          <p style="font-size:0.72rem;color:var(--ink-faint);letter-spacing:0.04em;">A&amp;E Survey Firm — U.S.</p>
+        </div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--rule);padding:2rem;">
+        <p style="font-size:0.88rem;color:var(--ink-muted);line-height:1.75;margin-bottom:1.25rem;font-style:italic;">"What I appreciate most is that I don't have to chase him for updates or explain things twice. I send the scan, he asks the right questions, and the drawings show up done right. It's refreshing to work with someone that reliable."</p>
+        <div style="border-top:1px solid var(--rule);padding-top:1rem;">
+          <p style="font-size:0.85rem;font-weight:500;color:var(--ink);margin-bottom:0.15rem;">Operations Director</p>
+          <p style="font-size:0.72rem;color:var(--ink-faint);letter-spacing:0.04em;">Commercial Survey Company — U.S.</p>
+        </div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--rule);padding:2rem;">
+        <p style="font-size:0.88rem;color:var(--ink-muted);line-height:1.75;margin-bottom:1.25rem;font-style:italic;">"I was skeptical about working with someone remote, but Orlando being on the same time zone made it feel like he was just down the hall. The plans came back cleaner than what I've gotten from local guys charging twice as much."</p>
+        <div style="border-top:1px solid var(--rule);padding-top:1rem;">
+          <p style="font-size:0.85rem;font-weight:500;color:var(--ink);margin-bottom:0.15rem;">Senior Surveyor</p>
+          <p style="font-size:0.72rem;color:var(--ink-faint);letter-spacing:0.04em;">National Retail Survey Provider — U.S.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section style="background:var(--accent);padding:4rem 0;">
+  <div class="container" style="text-align:center;">
+    <p style="font-family:var(--serif);font-size:2rem;color:#fff;margin-bottom:0.75rem;line-height:1.2;">Ready to start your project?</p>
+    <p style="font-size:1rem;color:rgba(255,255,255,0.7);margin-bottom:2rem;max-width:500px;margin-left:auto;margin-right:auto;">Get construction-ready drawings delivered in 4 business days. Send your project details and receive a quote within 24 hours.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <a href="#" onclick="event.preventDefault();openQuote()" style="background:#fff;color:var(--accent);padding:0.75rem 2rem;border-radius:2px;text-decoration:none;font-size:0.85rem;font-weight:500;letter-spacing:0.04em;">Get a Quote</a>
+      <a href="#portfolio" style="border:1px solid rgba(255,255,255,0.4);color:#fff;padding:0.75rem 2rem;border-radius:2px;text-decoration:none;font-size:0.85rem;font-weight:400;letter-spacing:0.04em;">View Work Samples</a>
+    </div>
+  </div>
+</section>
+
 <!-- CONTACT -->
 <section id="contact">
   <div class="container">
     <div class="section-header">
-      <span class="section-number">05</span>
+      <span class="section-number">06</span>
       <h2 class="section-title">Contact</h2>
     </div>
     <div class="contact-grid">
@@ -572,8 +645,8 @@
           <span class="availability-dot"></span>
           Available for new projects
         </div>
-        <p class="contact-intro">Looking for a reliable<br><em>remote drafting partner</em><br>for your survey pipeline?</p>
-        <p class="contact-note">I work directly with A&amp;E survey firms, real estate consultants, and project managers across the U.S. Turnaround times are tight, communication is clear, and every deliverable meets your format requirements.</p>
+        <p class="contact-intro">Start your project<br><em>today.</em></p>
+        <p class="contact-note">Send your project details — point cloud links, site photos, or a brief description — and receive a clear quote within 24 hours. No commitment, no hidden fees.</p>
       </div>
       <div>
         <ul class="contact-items">
@@ -620,6 +693,103 @@
     </div>
   </div>
 </section>
+
+<!-- QUOTE MODAL -->
+<div id="quoteModal" onclick="closeQuote()">
+  <div class="quote-inner" onclick="event.stopPropagation()">
+    <button class="quote-close" onclick="closeQuote()">&#x2715;</button>
+    <div class="quote-header">
+      <h3>Get a Quote</h3>
+      <p>Tell me about your project and I'll send you a proposal within 24 hours.</p>
+    </div>
+    <div class="quote-body">
+      <div class="q-row">
+        <div class="q-field">
+          <label class="q-label">Your Name *</label>
+          <input type="text" class="q-input" id="qName" placeholder="John Smith">
+        </div>
+        <div class="q-field">
+          <label class="q-label">Company Name</label>
+          <input type="text" class="q-input" id="qCompany" placeholder="ABC Survey Inc.">
+        </div>
+      </div>
+      <div class="q-field">
+        <label class="q-label">Email *</label>
+        <input type="email" class="q-input" id="qEmail" placeholder="john@company.com">
+      </div>
+      <div class="q-row">
+        <div class="q-field">
+          <label class="q-label">Project Type</label>
+          <select class="q-input" id="qType">
+            <option value="" disabled selected>Select type...</option>
+            <option>Banking / Financial</option>
+            <option>Retail</option>
+            <option>Medical / Veterinary</option>
+            <option>Restaurant / Food Service</option>
+            <option>Office / Commercial</option>
+            <option>Specialty Retail</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="q-field">
+          <label class="q-label">Approximate Sqft</label>
+          <input type="text" class="q-input" id="qSqft" placeholder="e.g. 4,500">
+        </div>
+      </div>
+      <div class="q-field">
+        <label class="q-label">Deliverables Needed (select all that apply)</label>
+        <div class="q-checks">
+          <label class="q-check"><input type="checkbox" value="Cover Sheet"><span>Cover Sheet</span></label>
+          <label class="q-check"><input type="checkbox" value="Floor Plan"><span>Floor Plan</span></label>
+          <label class="q-check"><input type="checkbox" value="Electrical Plan"><span>Electrical Plan</span></label>
+          <label class="q-check"><input type="checkbox" value="Reflected Ceiling Plan"><span>Reflected Ceiling Plan</span></label>
+          <label class="q-check"><input type="checkbox" value="HVAC Plan (2D)"><span>HVAC Plan (2D)</span></label>
+          <label class="q-check"><input type="checkbox" value="HVAC Plan (3D)"><span>HVAC Plan (3D)</span></label>
+          <label class="q-check"><input type="checkbox" value="Exterior Elevations"><span>Exterior Elevations</span></label>
+          <label class="q-check"><input type="checkbox" value="Interior Elevations"><span>Interior Elevations</span></label>
+          <label class="q-check"><input type="checkbox" value="Other"><span>Other</span></label>
+        </div>
+      </div>
+      <div class="q-field" id="qOtherWrap" style="display:none;">
+        <label class="q-label">Other Deliverables</label>
+        <input type="text" class="q-input" id="qOtherText" placeholder="Describe what you need...">
+      </div>
+      <div class="q-row">
+        <div class="q-field">
+          <label class="q-label">Number of Locations</label>
+          <input type="text" class="q-input" id="qLocations" placeholder="e.g. 1, 5, 10+">
+        </div>
+        <div class="q-field">
+          <label class="q-label">Desired Turnaround</label>
+          <select class="q-input" id="qTurnaround">
+            <option value="" disabled selected>Select...</option>
+            <option>Standard (4 business days)</option>
+            <option>Rush (2-3 business days)</option>
+            <option>Flexible / No rush</option>
+            <option>Ongoing / Pipeline</option>
+          </select>
+        </div>
+      </div>
+      <div class="q-field">
+        <label class="q-label">Survey Data Available</label>
+        <select class="q-input" id="qData">
+          <option value="" disabled selected>What data do you have?</option>
+          <option>Matterport scan</option>
+          <option>NavVis scan</option>
+          <option>Other point cloud</option>
+          <option>Field sketches + photos only</option>
+          <option>Not sure yet</option>
+        </select>
+      </div>
+      <div class="q-field">
+        <label class="q-label">Additional Notes</label>
+        <textarea class="q-input" id="qNotes" placeholder="Any details about your project, timeline, or special requirements..."></textarea>
+      </div>
+      <button class="q-submit" onclick="submitQuote()">Send Quote Request</button>
+      <p class="q-note">Your information is only used to prepare your quote. I'll respond within 24 hours.</p>
+    </div>
+  </div>
+</div>
 
 <footer>
   <span class="footer-name">O. Argueta — As-Built Drafting &amp; Survey Documentation</span>
@@ -776,27 +946,27 @@ const THUMBS = {};
 Object.keys(PROJECT_IMGS).forEach(k => { THUMBS[k] = PROJECT_IMGS[k][0]; });
 const PROJECTS = [
   // BANKING
-  { id:"Citizen_Bank__1_", category:"Banking", title:"Banking Branch — Full Survey", sqft:"~3,500 sqft", desc:"Full as-built survey: floor plan, electrical plan, reflected ceiling plan, and HVAC plan for a single-story bank branch with basement.", tags:["Floor Plan","Electrical","RCP","HVAC","Basement"] },
-  { id:"Citizen_Bank__3_", category:"Banking", title:"Banking Branch — Basement Documentation", sqft:"~2,800 sqft", desc:"Basement-level as-built: open office, breakroom, storage, and teller counter area. Full electrical and reflected ceiling plan.", tags:["Floor Plan","Electrical","RCP","Basement"] },
-  { id:"Citizen_Bank__4_", category:"Banking", title:"Multi-Story Banking Branch", sqft:"~7,000 sqft", desc:"First and second floor as-built for a two-story branch with lobby, offices, breakroom, and patio. Full electrical and HVAC documentation.", tags:["Floor Plan","Electrical","RCP","HVAC","2-Story"] },
-  { id:"Citizen_Bank__5_", category:"Banking", title:"Banking Branch — Second Floor", sqft:"~7,000 sqft", desc:"Second floor plan: open office, private offices, IT room, restrooms, and exterior patio. Complete electrical and HVAC documentation.", tags:["Floor Plan","Electrical","RCP","HVAC"] },
-  { id:"Citizen_Bank__6_", category:"Banking", title:"Banking Branch — Single Story Full Set", sqft:"~4,500 sqft", desc:"Single-story branch with teller counter, ATM room, bank vault, safe deposit boxes, multiple offices, and vestibule.", tags:["Floor Plan","Electrical","RCP","HVAC"] },
-  { id:"JP_Morgan__1_", category:"Banking", title:"Financial Services — IT & Office", sqft:"~1,800 sqft", desc:"Office and server room documentation: data rack, UPS, RFID reader, emergency power-off system, and telco board. Full electrical and ceiling plan.", tags:["Electrical","RCP","IT Room"] },
-  { id:"JP_Morgan__2_", category:"Banking", title:"Financial Services — Office Suite", sqft:"~1,800 sqft", desc:"Office suite floor plan with electrical layout including specialized outlets, panels, and reflected ceiling plan.", tags:["Floor Plan","Electrical","RCP"] },
+  { id:"Citizen_Bank__1_", category:"Banking", title:"Banking Branch — Full Survey", sqft:"4,815 sqft", delivery:"5 days", desc:"Full as-built survey for a single-story bank branch with basement. Includes cover sheet, floor plan, electrical plan, reflected ceiling plan, and HVAC plan. Construction-ready documentation delivered in 5 business days.", tags:["Cover Sheet","Floor Plan","Electrical","RCP","HVAC","Basement"] },
+  { id:"Citizen_Bank__3_", category:"Banking", title:"Banking Branch — Standard Set", sqft:"4,156 sqft", delivery:"4 days", desc:"As-built documentation for a standard bank branch including cover sheet, floor plan, electrical plan, reflected ceiling plan, and HVAC plan. Delivered in 4 business days.", tags:["Cover Sheet","Floor Plan","Electrical","RCP","HVAC"] },
+  { id:"Citizen_Bank__4_", category:"Banking", title:"Multi-Story Banking Branch", sqft:"4,669 sqft", delivery:"4 days", desc:"As-built for a bank branch with cover sheet, floor plan, electrical plan, reflected ceiling plan, and HVAC plan. Complete set delivered in 4 business days.", tags:["Cover Sheet","Floor Plan","Electrical","RCP","HVAC"] },
+  { id:"Citizen_Bank__5_", category:"Banking", title:"Banking Branch + Basement", sqft:"4,670 sqft", delivery:"5 days", desc:"Full documentation package including basement level. Cover sheet, floor plan, electrical plan, reflected ceiling plan, HVAC plan, plus basement documentation.", tags:["Cover Sheet","Floor Plan","Electrical","RCP","HVAC","Basement"] },
+  { id:"Citizen_Bank__6_", category:"Banking", title:"Banking Branch — Two-Story Full Set", sqft:"10,116 sqft", delivery:"6 days", desc:"Two-story bank branch with complete as-built package. Cover sheet, floor plan, electrical plan, reflected ceiling plan, HVAC plan, and second floor documentation.", tags:["Cover Sheet","Floor Plan","Electrical","RCP","HVAC","2nd Floor"] },
+  { id:"JP_Morgan__1_", category:"Banking", title:"Financial Services — Office Suite", sqft:"5,354 sqft", delivery:"3 days", desc:"Office suite documentation: cover sheet, floor plan, electrical plan, and reflected ceiling plan. Delivered in 3 business days.", tags:["Cover Sheet","Floor Plan","Electrical","RCP"] },
+  { id:"JP_Morgan__2_", category:"Banking", title:"Financial Services — Multi-Floor", sqft:"13,014 sqft", delivery:"5 days", desc:"Large financial services office with second floor. Cover sheet, floor plan, electrical plan, reflected ceiling plan, plus second floor documentation.", tags:["Cover Sheet","Floor Plan","Electrical","RCP","2nd Floor"] },
   // RETAIL
-  { id:"Ahsleys__1_", category:"Retail", title:"Furniture Retail — Floor Plan", sqft:"~8,500 sqft", desc:"Large-format furniture retail store with structural column grid, sales floor, restrooms, and vestibule. Storefront elevation included.", tags:["Floor Plan","Elevations","Large Format"] },
-  { id:"Ahsleys__2_", category:"Retail", title:"Furniture Retail — Full Set", sqft:"~8,500 sqft", desc:"Floor plan, storefront and exterior elevations documenting awnings, signage panels, wall finishes, and utility locations.", tags:["Floor Plan","Elevations","Site"] },
-  { id:"Casey_s__1_", category:"Retail", title:"Convenience Store — Full Set", sqft:"4,047 sqft", desc:"Convenience store as-built: floor plan, electrical plan with panel schedule (MDP 600A), RCP, HVAC, and roof/exterior elevations.", tags:["Floor Plan","Electrical","RCP","HVAC","Elevations"] },
-  { id:"Casey_s__2_", category:"Retail", title:"Convenience Store + Car Wash", sqft:"4,588 sqft", desc:"Full as-built for convenience store with adjacent car wash, cooler, freezer, data rack, and complete panel schedule.", tags:["Floor Plan","Electrical","HVAC","Elevations","Car Wash"] },
-  { id:"Trader_Joes__1_", category:"Retail", title:"Grocery Store — Platform Plan & HVAC", sqft:"17,825 sqft", desc:"Large-format grocery store with produce, frozen cases, display shelves, breakroom, and reserve freezer. HVAC plan with 4 system heat pumps.", tags:["Floor Plan","HVAC","Large Format","Mechanical"] },
-  { id:"Hibbet_Sports__1_", category:"Retail", title:"Sporting Goods — Full Survey", sqft:"~6,500 sqft", desc:"Full as-built: floor plan with apparel wall and fitting rooms, electrical, RCP, roof plan with RTU inventory, and exterior elevations.", tags:["Floor Plan","Electrical","RCP","Roof Plan","Elevations"] },
-  { id:"Hibbet_Sports__3_", category:"Retail", title:"Sporting Goods — Floor Plan & Elevations", sqft:"~6,500 sqft", desc:"Floor plan with sales floor, fitting rooms, and storage. Northeast and northwest exterior elevations with storefront glazing detail.", tags:["Floor Plan","Electrical","RCP","Elevations"] },
+  { id:"Ahsleys__1_", category:"Retail", title:"Furniture Retail — Floor Plan", sqft:"36,809 sqft", delivery:"4 days", desc:"Large-format furniture retail store. Cover sheet, floor plan, and exterior elevations for a 36,800+ sqft space. Delivered in 4 business days.", tags:["Cover Sheet","Floor Plan","Exterior Elevations"] },
+  { id:"Ahsleys__2_", category:"Retail", title:"Furniture Retail — Full Set", sqft:"76,309 sqft", delivery:"4 days", desc:"Major furniture retail location — over 76,000 sqft. Cover sheet, floor plan, and exterior elevations. Complete documentation delivered in 4 business days.", tags:["Cover Sheet","Floor Plan","Exterior Elevations"] },
+  { id:"Casey_s__1_", category:"Retail", title:"Convenience Store — Full Set", sqft:"5,474 sqft", delivery:"8 days", desc:"Comprehensive convenience store documentation in Revit 3D. Cover sheet, floor plan, furniture plan, reflected ceiling plan, 3D HVAC, site plan, roof plan, exterior elevations, interior elevations, across 2 sections.", tags:["RVT 3D","Cover Sheet","Floor Plan","Furniture Plan","RCP","3D HVAC","Site Plan","Roof Plan","Ext. Elevations","Int. Elevations"] },
+  { id:"Casey_s__2_", category:"Retail", title:"Convenience Store + Car Wash", sqft:"4,588 sqft", delivery:"7 days", desc:"Full Revit 3D model for convenience store with car wash. Cover sheet, floor plan, furniture plan, reflected ceiling plan, 3D HVAC, site plan, roof plan, exterior elevations, interior elevations, across 2 sections.", tags:["RVT 3D","Cover Sheet","Floor Plan","Furniture Plan","RCP","3D HVAC","Site Plan","Roof Plan","Ext. Elevations","Int. Elevations"] },
+  { id:"Trader_Joes__1_", category:"Retail", title:"Grocery Store — Cover Sheet & Floor Plan", sqft:"17,136 sqft", delivery:"3 days", desc:"Large-format grocery store with cover sheet and floor plan. Over 17,000 sqft documented in 3 business days.", tags:["Cover Sheet","Floor Plan"] },
+  { id:"Hibbet_Sports__1_", category:"Retail", title:"Sporting Goods — Full Survey", sqft:"4,124 sqft", delivery:"5 days", desc:"Complete sporting goods store documentation. Cover sheet, floor plan, electrical plan, reflected ceiling plan, roof plan, storefront elevation, and photo reference plan.", tags:["Cover Sheet","Floor Plan","Electrical","RCP","Roof Plan","Storefront Elev.","Photo Ref."] },
+  { id:"Hibbet_Sports__3_", category:"Retail", title:"Sporting Goods — Full Survey 2", sqft:"6,135 sqft", delivery:"5 days", desc:"Full as-built for a larger sporting goods location. Cover sheet, floor plan, electrical plan, reflected ceiling plan, roof plan, storefront elevation, and photo reference plan.", tags:["Cover Sheet","Floor Plan","Electrical","RCP","Roof Plan","Storefront Elev.","Photo Ref."] },
   // SPECIALTY
-  { id:"Gorjana__1_", category:"Specialty", title:"Jewelry Boutique — Floor Plan & Elevations", sqft:"~1,200 sqft", desc:"Mall-based jewelry boutique with sales floor, fitting rooms, and storage. Interior elevations with glass shelving and LED panel walls.", tags:["Floor Plan","RCP","Elevations"] },
-  { id:"Gorjana__3_", category:"Specialty", title:"Jewelry Boutique — Sales Elevations", sqft:"~1,200 sqft", desc:"Detailed interior and storefront elevations including stainless steel strips, display platforms, and glass shelving configurations.", tags:["Elevations","Storefront","Interior"] },
+  { id:"Gorjana__1_", category:"Specialty", title:"Jewelry Boutique — Floor Plan & Elevations", sqft:"1,179 sqft", delivery:"3 days", desc:"Mall-based jewelry boutique. Cover sheet, floor plan, interior elevations, and exterior elevations including storefront. Delivered in 3 business days.", tags:["Cover Sheet","Floor Plan","Int. Elevations","Ext. Elevations (Storefront)"] },
+  { id:"Gorjana__3_", category:"Specialty", title:"Jewelry Boutique — Full Set", sqft:"1,651 sqft", delivery:"3 days", desc:"Jewelry boutique with complete elevation package. Cover sheet, floor plan, interior elevations, and exterior/storefront elevations.", tags:["Cover Sheet","Floor Plan","Int. Elevations","Ext. Elevations (Storefront)"] },
   // MEDICAL
-  { id:"Veterinary__1_", category:"Medical", title:"Veterinary Emergency Clinic — Floor Plan", sqft:"5,255 sqft", desc:"Full as-built for veterinary emergency clinic with suites, kitchenette, breakroom, and utility rooms. RCP and roof plan included.", tags:["Floor Plan","RCP","Roof Plan"] },
-  { id:"Veterinary__2_", category:"Medical", title:"Veterinary Emergency Clinic — HVAC & Elevations", sqft:"5,255 sqft", desc:"HVAC plan with Carrier RTU inventory, exterior elevations with brick/stucco wall finishes, parapet walls, and awnings.", tags:["HVAC","Elevations","Roof Plan"] },
+  { id:"Veterinary__1_", category:"Medical", title:"Veterinary Emergency Clinic — Floor Plan", sqft:"5,255 sqft", delivery:"6 days", desc:"Full Revit 3D model for veterinary emergency clinic. Cover sheet, site plan, floor plan, reflected ceiling plan, roof framing plan, roof plan, exterior elevations, and riser diagram.", tags:["RVT 3D","Cover Sheet","Site Plan","Floor Plan","RCP","Roof Framing","Roof Plan","Ext. Elevations","Riser Diagram"] },
+  { id:"Veterinary__2_", category:"Medical", title:"Veterinary Emergency Clinic — Full Set", sqft:"5,279 sqft", delivery:"6 days", desc:"Complete Revit 3D documentation for veterinary clinic. Cover sheet, site plan, floor plan, reflected ceiling plan, roof framing plan, roof plan, exterior elevations, and riser diagram.", tags:["RVT 3D","Cover Sheet","Site Plan","Floor Plan","RCP","Roof Framing","Roof Plan","Ext. Elevations","Riser Diagram"] },
 ];
 
 // ---- Carousel state ----
@@ -815,7 +985,7 @@ function renderCards(filter) {
       <div class="pc-body">
         <div class="pc-type">${p.category}</div>
         <div class="pc-title">${p.title}</div>
-        <div class="pc-sqft">${p.sqft}</div>
+        <div class="pc-sqft">${p.sqft}${p.delivery ? ' · Delivered in ' + p.delivery : ''}</div>
         <div class="pc-tags">${tags}</div>
       </div>
     </div>`;
@@ -830,7 +1000,7 @@ function openLB(id) {
   updateCarousel();
   document.getElementById('lbType').textContent = p.category;
   document.getElementById('lbTitle').textContent = p.title;
-  document.getElementById('lbSqft').textContent = p.sqft;
+  document.getElementById('lbSqft').textContent = p.sqft + (p.delivery ? ' · Delivered in ' + p.delivery : '');
   document.getElementById('lbDesc').textContent = p.desc;
   document.getElementById('lbTags').innerHTML = p.tags.map(t => `<span style="font-size:.65rem;font-weight:500;padding:.2rem .55rem;border:1px solid rgba(255,255,255,0.12);border-radius:2px;color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.05);letter-spacing:.04em">${t}</span>`).join(' ');
   document.getElementById('lightbox').style.display = 'flex';
@@ -1078,6 +1248,70 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') goSlide(currentSlide + 1);
   if (e.key === 'ArrowLeft') goSlide(currentSlide - 1);
 });
+
+// ---- QUOTE MODAL ----
+function openQuote() {
+  document.getElementById('quoteModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeQuote() {
+  document.getElementById('quoteModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// Show/hide "Other" text field
+document.querySelectorAll('.q-check input').forEach(cb => {
+  cb.addEventListener('change', () => {
+    const otherCb = document.querySelector('.q-check input[value="Other"]');
+    document.getElementById('qOtherWrap').style.display = otherCb && otherCb.checked ? 'block' : 'none';
+  });
+});
+
+function submitQuote() {
+  const name = document.getElementById('qName').value.trim();
+  const email = document.getElementById('qEmail').value.trim();
+  if (!name || !email) {
+    alert('Please fill in your name and email.');
+    return;
+  }
+  const company = document.getElementById('qCompany').value.trim();
+  const type = document.getElementById('qType').value;
+  const sqft = document.getElementById('qSqft').value.trim();
+  const deliverables = Array.from(document.querySelectorAll('.q-check input:checked')).map(c => c.value);
+  const otherText = document.getElementById('qOtherText').value.trim();
+  const locations = document.getElementById('qLocations').value.trim();
+  const turnaround = document.getElementById('qTurnaround').value;
+  const data = document.getElementById('qData').value;
+  const notes = document.getElementById('qNotes').value.trim();
+
+  const subject = encodeURIComponent('Quote Request — ' + (company || name));
+  const body = encodeURIComponent(
+    'Name: ' + name + '\n' +
+    'Company: ' + (company || 'N/A') + '\n' +
+    'Email: ' + email + '\n' +
+    'Project Type: ' + (type || 'N/A') + '\n' +
+    'Approx. Sqft: ' + (sqft || 'N/A') + '\n' +
+    'Deliverables: ' + (deliverables.length ? deliverables.join(', ') : 'N/A') + '\n' +
+    (otherText ? 'Other deliverables: ' + otherText + '\n' : '') +
+    'Number of Locations: ' + (locations || 'N/A') + '\n' +
+    'Desired Turnaround: ' + (turnaround || 'N/A') + '\n' +
+    'Survey Data: ' + (data || 'N/A') + '\n' +
+    'Notes: ' + (notes || 'None') + '\n'
+  );
+
+  window.location.href = 'mailto:oarguetapuerto@hotmail.com?subject=' + subject + '&body=' + body;
+
+  // Show success
+  const btn = document.querySelector('.q-submit');
+  btn.textContent = 'Opening email client...';
+  btn.style.opacity = '0.7';
+  setTimeout(() => {
+    btn.textContent = 'Send Quote Request';
+    btn.style.opacity = '1';
+    closeQuote();
+  }, 3000);
+}
+
 </script>
 </body>
 </html>
