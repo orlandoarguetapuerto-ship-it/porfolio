@@ -710,17 +710,17 @@
       <div class="quote-body">
         <div class="q-row">
           <div class="q-field">
-            <label class="q-label">Your Name *</label>
-            <input type="text" class="q-input" id="qName" placeholder="John Smith">
+            <label class="q-label">Your Name <span style="color:rgba(255,120,120,0.9)">*</span></label>
+            <input type="text" class="q-input" id="qName" placeholder="John Smith" oninput="this.style.borderColor='';this.style.background='';const e=this.parentNode.querySelector('.q-field-error');if(e)e.remove();">
           </div>
           <div class="q-field">
-            <label class="q-label">Company Name</label>
-            <input type="text" class="q-input" id="qCompany" placeholder="ABC Survey Inc.">
+            <label class="q-label">Company Name <span style="color:rgba(255,120,120,0.9)">*</span></label>
+            <input type="text" class="q-input" id="qCompany" placeholder="ABC Survey Inc." oninput="this.style.borderColor='';this.style.background='';const e=this.parentNode.querySelector('.q-field-error');if(e)e.remove();">
           </div>
         </div>
         <div class="q-field">
-          <label class="q-label">Email *</label>
-          <input type="email" class="q-input" id="qEmail" placeholder="john@company.com">
+          <label class="q-label">Email <span style="color:rgba(255,120,120,0.9)">*</span></label>
+          <input type="email" class="q-input" id="qEmail" placeholder="john@company.com" oninput="this.style.borderColor='';this.style.background='';const e=this.parentNode.querySelector('.q-field-error');if(e)e.remove();">
         </div>
         <div class="q-row">
           <div class="q-field">
@@ -737,8 +737,8 @@
             </select>
           </div>
           <div class="q-field">
-            <label class="q-label">Approximate Sqft</label>
-            <input type="text" class="q-input" id="qSqft" placeholder="e.g. 4,500">
+            <label class="q-label">Approximate Sqft <span style="color:rgba(255,120,120,0.9)">*</span></label>
+            <input type="text" class="q-input" id="qSqft" placeholder="e.g. 4,500" oninput="this.style.borderColor='';this.style.background='';const e=this.parentNode.querySelector('.q-field-error');if(e)e.remove();">
           </div>
         </div>
         <div class="q-field">
@@ -1273,16 +1273,60 @@ document.querySelectorAll('.q-check input').forEach(cb => {
   });
 });
 
+function clearFieldError(id) {
+  const el = document.getElementById(id);
+  el.style.borderColor = '';
+  el.style.background = '';
+}
+
+function setFieldError(id) {
+  const el = document.getElementById(id);
+  el.style.borderColor = 'rgba(255,80,80,0.9)';
+  el.style.background = 'rgba(255,80,80,0.08)';
+}
+
 function submitQuote() {
-  const name = document.getElementById('qName').value.trim();
-  const email = document.getElementById('qEmail').value.trim();
-  if (!name || !email) {
-    alert('Please fill in your name and email.');
-    return;
+  const nameEl = document.getElementById('qName');
+  const emailEl = document.getElementById('qEmail');
+  const companyEl = document.getElementById('qCompany');
+  const sqftEl = document.getElementById('qSqft');
+
+  const name = nameEl.value.trim();
+  const email = emailEl.value.trim();
+  const company = companyEl.value.trim();
+  const sqft = sqftEl.value.trim();
+
+  // Clear previous errors
+  [nameEl, emailEl, companyEl, sqftEl].forEach(el => {
+    el.style.borderColor = '';
+    el.style.background = '';
+  });
+
+  // Remove old error messages
+  document.querySelectorAll('.q-field-error').forEach(e => e.remove());
+
+  let hasError = false;
+
+  function markError(el, msg) {
+    el.style.borderColor = 'rgba(255,80,80,0.9)';
+    el.style.background = 'rgba(255,80,80,0.1)';
+    const err = document.createElement('span');
+    err.className = 'q-field-error';
+    err.style.cssText = 'display:block;font-size:0.72rem;color:rgba(255,120,120,1);margin-top:0.3rem;';
+    err.textContent = msg;
+    el.parentNode.appendChild(err);
+    hasError = true;
   }
-  const company = document.getElementById('qCompany').value.trim();
+
+  if (!name) markError(nameEl, 'Name is required.');
+  if (!company) markError(companyEl, 'Company name is required.');
+  if (!email) markError(emailEl, 'Email is required.');
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) markError(emailEl, 'Enter a valid email address.');
+  if (!sqft) markError(sqftEl, 'Approximate sqft is required.');
+
+  if (hasError) return;
+
   const type = document.getElementById('qType').value;
-  const sqft = document.getElementById('qSqft').value.trim();
   const deliverables = Array.from(document.querySelectorAll('.q-check input:checked')).map(c => c.value);
   const otherText = document.getElementById('qOtherText').value.trim();
   const data = document.getElementById('qData').value;
@@ -1295,9 +1339,9 @@ function submitQuote() {
   const payload = {
     name: name,
     email: email,
-    company: company || 'N/A',
+    company: company,
     project_type: type || 'N/A',
-    approx_sqft: sqft || 'N/A',
+    approx_sqft: sqft,
     deliverables: deliverables.length ? deliverables.join(', ') : 'N/A',
     other_deliverables: otherText || '',
     survey_data: data || 'N/A',
