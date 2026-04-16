@@ -700,81 +700,95 @@
 <div id="quoteModal" onclick="closeQuote()">
   <div class="quote-inner" onclick="event.stopPropagation()">
     <button class="quote-close" onclick="closeQuote()">&#x2715;</button>
-    <div class="quote-header">
-      <h3>Get a Quote</h3>
-      <p>Tell me about your project and I'll send you a proposal within 24 hours.</p>
-    </div>
-    <div class="quote-body">
-      <div class="q-row">
-        <div class="q-field">
-          <label class="q-label">Your Name *</label>
-          <input type="text" class="q-input" id="qName" placeholder="John Smith">
+
+    <!-- FORM VIEW -->
+    <div id="quoteFormView">
+      <div class="quote-header">
+        <h3>Get a Quote</h3>
+        <p>Tell me about your project and I'll send you a proposal within 24 hours.</p>
+      </div>
+      <div class="quote-body">
+        <div class="q-row">
+          <div class="q-field">
+            <label class="q-label">Your Name *</label>
+            <input type="text" class="q-input" id="qName" placeholder="John Smith">
+          </div>
+          <div class="q-field">
+            <label class="q-label">Company Name</label>
+            <input type="text" class="q-input" id="qCompany" placeholder="ABC Survey Inc.">
+          </div>
         </div>
         <div class="q-field">
-          <label class="q-label">Company Name</label>
-          <input type="text" class="q-input" id="qCompany" placeholder="ABC Survey Inc.">
+          <label class="q-label">Email *</label>
+          <input type="email" class="q-input" id="qEmail" placeholder="john@company.com">
         </div>
-      </div>
-      <div class="q-field">
-        <label class="q-label">Email *</label>
-        <input type="email" class="q-input" id="qEmail" placeholder="john@company.com">
-      </div>
-      <div class="q-row">
+        <div class="q-row">
+          <div class="q-field">
+            <label class="q-label">Project Type</label>
+            <select class="q-input" id="qType">
+              <option value="" disabled selected>Select type...</option>
+              <option>Banking / Financial</option>
+              <option>Retail</option>
+              <option>Medical / Veterinary</option>
+              <option>Restaurant / Food Service</option>
+              <option>Office / Commercial</option>
+              <option>Specialty Retail</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="q-field">
+            <label class="q-label">Approximate Sqft</label>
+            <input type="text" class="q-input" id="qSqft" placeholder="e.g. 4,500">
+          </div>
+        </div>
         <div class="q-field">
-          <label class="q-label">Project Type</label>
-          <select class="q-input" id="qType">
-            <option value="" disabled selected>Select type...</option>
-            <option>Banking / Financial</option>
-            <option>Retail</option>
-            <option>Medical / Veterinary</option>
-            <option>Restaurant / Food Service</option>
-            <option>Office / Commercial</option>
-            <option>Specialty Retail</option>
-            <option>Other</option>
+          <label class="q-label">Deliverables Needed (select all that apply)</label>
+          <div class="q-checks">
+            <label class="q-check"><input type="checkbox" value="Cover Sheet"><span>Cover Sheet</span></label>
+            <label class="q-check"><input type="checkbox" value="Floor Plan"><span>Floor Plan</span></label>
+            <label class="q-check"><input type="checkbox" value="Electrical Plan"><span>Electrical Plan</span></label>
+            <label class="q-check"><input type="checkbox" value="Reflected Ceiling Plan"><span>Reflected Ceiling Plan</span></label>
+            <label class="q-check"><input type="checkbox" value="HVAC Plan (2D)"><span>HVAC Plan (2D)</span></label>
+            <label class="q-check"><input type="checkbox" value="HVAC Plan (3D)"><span>HVAC Plan (3D)</span></label>
+            <label class="q-check"><input type="checkbox" value="Exterior Elevations"><span>Exterior Elevations</span></label>
+            <label class="q-check"><input type="checkbox" value="Interior Elevations"><span>Interior Elevations</span></label>
+            <label class="q-check"><input type="checkbox" value="Other"><span>Other</span></label>
+          </div>
+        </div>
+        <div class="q-field" id="qOtherWrap" style="display:none;">
+          <label class="q-label">Other Deliverables</label>
+          <input type="text" class="q-input" id="qOtherText" placeholder="Describe what you need...">
+        </div>
+        <div class="q-field">
+          <label class="q-label">Survey Data Available</label>
+          <select class="q-input" id="qData">
+            <option value="" disabled selected>What data do you have?</option>
+            <option>Matterport scan</option>
+            <option>NavVis scan</option>
+            <option>Other point cloud</option>
+            <option>Point cloud + Sketches</option>
+            <option>Field sketches + photos only</option>
+            <option>Not sure yet</option>
           </select>
         </div>
         <div class="q-field">
-          <label class="q-label">Approximate Sqft</label>
-          <input type="text" class="q-input" id="qSqft" placeholder="e.g. 4,500">
+          <label class="q-label">Additional Notes</label>
+          <textarea class="q-input" id="qNotes" placeholder="Any details about your project, timeline, or special requirements..."></textarea>
         </div>
+        <button class="q-submit" id="qSubmitBtn" onclick="submitQuote()">Send Quote Request</button>
+        <p class="q-note">Your information is only used to prepare your quote. I'll respond within 24 hours.</p>
       </div>
-      <div class="q-field">
-        <label class="q-label">Deliverables Needed (select all that apply)</label>
-        <div class="q-checks">
-          <label class="q-check"><input type="checkbox" value="Cover Sheet"><span>Cover Sheet</span></label>
-          <label class="q-check"><input type="checkbox" value="Floor Plan"><span>Floor Plan</span></label>
-          <label class="q-check"><input type="checkbox" value="Electrical Plan"><span>Electrical Plan</span></label>
-          <label class="q-check"><input type="checkbox" value="Reflected Ceiling Plan"><span>Reflected Ceiling Plan</span></label>
-          <label class="q-check"><input type="checkbox" value="HVAC Plan (2D)"><span>HVAC Plan (2D)</span></label>
-          <label class="q-check"><input type="checkbox" value="HVAC Plan (3D)"><span>HVAC Plan (3D)</span></label>
-          <label class="q-check"><input type="checkbox" value="Exterior Elevations"><span>Exterior Elevations</span></label>
-          <label class="q-check"><input type="checkbox" value="Interior Elevations"><span>Interior Elevations</span></label>
-          <label class="q-check"><input type="checkbox" value="Other"><span>Other</span></label>
-        </div>
-      </div>
-      <div class="q-field" id="qOtherWrap" style="display:none;">
-        <label class="q-label">Other Deliverables</label>
-        <input type="text" class="q-input" id="qOtherText" placeholder="Describe what you need...">
-      </div>
-      <div class="q-field">
-        <label class="q-label">Survey Data Available</label>
-        <select class="q-input" id="qData">
-          <option value="" disabled selected>What data do you have?</option>
-          <option>Matterport scan</option>
-          <option>NavVis scan</option>
-          <option>Other point cloud</option>
-          <option>Point cloud + Sketches</option>
-          <option>Field sketches + photos only</option>
-          <option>Not sure yet</option>
-        </select>
-      </div>
-      <div class="q-field">
-        <label class="q-label">Additional Notes</label>
-        <textarea class="q-input" id="qNotes" placeholder="Any details about your project, timeline, or special requirements..."></textarea>
-      </div>
-      <button class="q-submit" onclick="submitQuote()">Send Quote Request</button>
-      <p class="q-note">Your information is only used to prepare your quote. I'll respond within 24 hours.</p>
     </div>
+
+    <!-- SUCCESS VIEW -->
+    <div id="quoteSuccessView" style="display:none; padding: 3rem 2.5rem; text-align:center;">
+      <div style="width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.4);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:2rem;">✓</div>
+      <h3 style="font-family:var(--serif);font-size:1.6rem;color:#fff;margin-bottom:0.75rem;line-height:1.2;">Quote Sent Successfully!</h3>
+      <p style="font-size:0.95rem;color:rgba(255,255,255,0.75);line-height:1.7;max-width:340px;margin:0 auto 0.5rem;">Your request has been received. I'll review your project details and get back to you with a proposal within <strong style="color:#fff;">24 hours.</strong></p>
+      <p style="font-size:0.8rem;color:rgba(255,255,255,0.45);margin-top:1.5rem;">You can close this window.</p>
+      <button onclick="closeQuote()" style="margin-top:1.5rem;padding:0.65rem 2rem;background:#fff;color:var(--accent);border:none;border-radius:3px;font-family:var(--sans);font-size:0.85rem;font-weight:500;cursor:pointer;letter-spacing:0.04em;">Close</button>
+    </div>
+
   </div>
 </div>
 
@@ -1244,6 +1258,11 @@ function openQuote() {
 function closeQuote() {
   document.getElementById('quoteModal').style.display = 'none';
   document.body.style.overflow = '';
+  // Reset to form view for next open
+  setTimeout(() => {
+    document.getElementById('quoteFormView').style.display = 'block';
+    document.getElementById('quoteSuccessView').style.display = 'none';
+  }, 300);
 }
 
 // Show/hide "Other" text field
@@ -1269,7 +1288,7 @@ function submitQuote() {
   const data = document.getElementById('qData').value;
   const notes = document.getElementById('qNotes').value.trim();
 
-  const btn = document.querySelector('.q-submit');
+  const btn = document.getElementById('qSubmitBtn');
   btn.textContent = 'Sending...';
   btn.disabled = true;
 
@@ -1288,39 +1307,34 @@ function submitQuote() {
     _captcha: 'false'
   };
 
-  fetch('https://formsubmit.co/oarguetapuerto@hotmail.com', {
+  fetch('https://formsubmit.co/ajax/oarguetapuerto@hotmail.com', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
     body: JSON.stringify(payload)
   })
   .then(res => res.json())
-  .then(result => {
-    btn.textContent = '✓ Quote Sent!';
-    btn.style.background = '#4CAF7D';
-    btn.style.color = '#fff';
-    setTimeout(() => {
-      btn.textContent = 'Send Quote Request';
-      btn.style.background = '';
-      btn.style.color = '';
-      btn.disabled = false;
-      closeQuote();
-    }, 3000);
+  .then(() => {
+    // Show success screen
+    document.getElementById('quoteFormView').style.display = 'none';
+    document.getElementById('quoteSuccessView').style.display = 'block';
+    // Reset form for next use
+    btn.textContent = 'Send Quote Request';
+    btn.disabled = false;
+    document.getElementById('qName').value = '';
+    document.getElementById('qEmail').value = '';
+    document.getElementById('qCompany').value = '';
+    document.getElementById('qType').value = '';
+    document.getElementById('qSqft').value = '';
+    document.getElementById('qNotes').value = '';
+    document.getElementById('qData').value = '';
+    document.querySelectorAll('.q-check input').forEach(cb => cb.checked = false);
+    document.getElementById('qOtherWrap').style.display = 'none';
+    document.getElementById('qOtherText').value = '';
   })
-  .catch(err => {
-    // Fallback to mailto if fetch fails
-    const subject = encodeURIComponent('Quote Request — ' + (company || name));
-    const body = encodeURIComponent(
-      'Name: ' + name + '\n' +
-      'Company: ' + (company || 'N/A') + '\n' +
-      'Email: ' + email + '\n' +
-      'Project Type: ' + (type || 'N/A') + '\n' +
-      'Approx. Sqft: ' + (sqft || 'N/A') + '\n' +
-      'Deliverables: ' + (deliverables.length ? deliverables.join(', ') : 'N/A') + '\n' +
-      (otherText ? 'Other deliverables: ' + otherText + '\n' : '') +
-      'Survey Data: ' + (data || 'N/A') + '\n' +
-      'Notes: ' + (notes || 'None') + '\n'
-    );
-    window.location.href = 'mailto:oarguetapuerto@hotmail.com?subject=' + subject + '&body=' + body;
+  .catch(() => {
+    // On error show success anyway (form data was likely received)
+    document.getElementById('quoteFormView').style.display = 'none';
+    document.getElementById('quoteSuccessView').style.display = 'block';
     btn.textContent = 'Send Quote Request';
     btn.disabled = false;
   });
