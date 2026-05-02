@@ -84,6 +84,9 @@
   .svc-img-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 0.4rem 0; min-height: 280px; }
   .svc-img-wrap img { max-width: 100%; max-height: 320px; object-fit: contain; display: block; }
   .svc-price { font-size: 0.95rem; color: var(--accent); font-weight: 700; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--rule); letter-spacing: -0.005em; }
+  .svc-see-more { font-size: 0.78rem; color: #5A7FB8; font-weight: 500; margin-top: 0.4rem; letter-spacing: 0.02em; display: inline-block; }
+  .svc-card:hover .svc-see-more { animation: svcBlink 0.9s ease-in-out infinite; }
+  @keyframes svcBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 
   /* HOW I WORK */
   #how-it-works { background: var(--cream); padding: 5rem 3rem; }
@@ -148,6 +151,16 @@
   .about-list li { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.5rem 0; font-size: 0.88rem; color: var(--ink); line-height: 1.5; }
   .about-check { width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.18rem; }
   .about-check svg { width: 11px; height: 11px; }
+  .about-bio { font-size: 0.92rem; color: var(--ink-muted); line-height: 1.75; margin-bottom: 1.1rem; }
+  .about-bio:last-of-type { margin-bottom: 1.75rem; }
+  .about-pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+  .about-pillar-num { font-family: var(--serif); font-size: 1.85rem; color: var(--accent); line-height: 1; margin-bottom: 0.4rem; letter-spacing: -0.01em; font-weight: 400; }
+  .about-pillar-label { font-size: 0.74rem; color: var(--ink-muted); line-height: 1.4; }
+  @media (max-width: 600px) {
+    .about-pillars { grid-template-columns: 1fr; gap: 1.25rem; }
+    .about-pillar { display: flex; align-items: baseline; gap: 0.85rem; }
+    .about-pillar-num { font-size: 1.65rem; margin-bottom: 0; flex-shrink: 0; min-width: 56px; }
+  }
 
   .tools-eyebrow { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
   .tools-title { font-family: var(--serif); font-size: 1.85rem; color: var(--ink); margin-bottom: 1.75rem; letter-spacing: -0.01em; line-height: 1.2; font-weight: 400; }
@@ -208,18 +221,19 @@
   /* SERVICE DETAIL MODAL */
   #svcModal { display:none; position:fixed; inset:0; z-index:9999; background:rgba(6,17,29,0.92); align-items:center; justify-content:center; padding:1.5rem; }
   #svcModal.open { display:flex; }
-  .svc-modal-inner { background:#fff; max-width:980px; width:100%; max-height:92vh; overflow:hidden; border-radius:4px; position:relative; }
+  .svc-modal-inner { background:#fff; max-width:980px; width:100%; height:620px; max-height:92vh; overflow:hidden; border-radius:4px; position:relative; display:flex; flex-direction:column; }
   .svc-modal-close { position:absolute; top:14px; right:14px; background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.2); color:#fff; width:34px; height:34px; border-radius:50%; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:10; transition:background 0.2s; }
   .svc-modal-close:hover { background:rgba(0,0,0,0.8); }
-  .svc-modal-grid { display:grid; grid-template-columns:1fr 1fr; min-height:540px; max-height:92vh; }
+  .svc-modal-grid { display:grid; grid-template-columns:1fr 1fr; flex:1; overflow:hidden; min-height:0; }
   .svc-modal-img { background:var(--cream); display:flex; align-items:center; justify-content:center; padding:2rem; overflow:hidden; }
   .svc-modal-img img { max-width:100%; max-height:100%; object-fit:contain; display:block; }
-  .svc-modal-info { padding:2.5rem 2.5rem 1.75rem; display:flex; flex-direction:column; overflow-y:auto; background:#fff; }
-  .svc-modal-num { font-size:0.7rem; color:var(--ink-faint); font-weight:500; letter-spacing:0.12em; margin-bottom:0.85rem; }
-  .svc-modal-title { font-family:var(--serif); font-size:1.85rem; color:var(--ink); line-height:1.2; letter-spacing:-0.015em; margin-bottom:0.85rem; font-weight:400; }
-  .svc-modal-divider { width:32px; height:2px; background:var(--accent); margin-bottom:1.25rem; }
-  .svc-modal-desc { font-size:0.92rem; color:var(--ink-muted); line-height:1.75; margin-bottom:1.25rem; }
-  .svc-modal-deliverable { font-size:0.78rem; color:var(--ink-faint); line-height:1.6; padding-bottom:1rem; border-bottom:1px solid var(--rule); margin-bottom:1.25rem; }
+  .svc-modal-info { padding:2.5rem 2.5rem 1.75rem; display:flex; flex-direction:column; overflow:hidden; background:#fff; min-height:0; }
+  .svc-modal-num { font-size:0.7rem; color:var(--ink-faint); font-weight:500; letter-spacing:0.12em; margin-bottom:0.85rem; flex-shrink:0; }
+  .svc-modal-title { font-family:var(--serif); font-size:1.85rem; color:var(--ink); line-height:1.2; letter-spacing:-0.015em; margin-bottom:0.85rem; font-weight:400; word-wrap:break-word; flex-shrink:0; }
+  .svc-modal-divider { width:32px; height:2px; background:var(--accent); margin-bottom:1.25rem; flex-shrink:0; }
+  .svc-modal-scroll { flex:1; overflow-y:auto; min-height:0; padding-right:0.25rem; }
+  .svc-modal-desc { font-size:0.92rem; color:var(--ink-muted); line-height:1.75; margin-bottom:1.25rem; word-wrap:break-word; }
+  .svc-modal-deliverable { font-size:0.78rem; color:var(--ink-faint); line-height:1.6; padding-bottom:1rem; border-bottom:1px solid var(--rule); margin-bottom:1.25rem; word-wrap:break-word; }
   .svc-modal-deliverable:empty { display:none; }
   .svc-modal-price { font-size:1.1rem; color:var(--accent); font-weight:700; letter-spacing:-0.005em; margin-bottom:1.5rem; }
   .svc-modal-actions { display:flex; gap:0.5rem; align-items:center; margin-top:auto; padding-top:1rem; border-top:1px solid var(--rule); }
@@ -229,21 +243,29 @@
   .svc-modal-cta:hover { background:var(--accent-dark); }
   .svc-modal-counter { text-align:center; font-size:0.7rem; color:var(--ink-faint); letter-spacing:0.08em; margin-top:0.85rem; }
   @media (max-width: 760px) {
-    .svc-modal-grid { grid-template-columns:1fr; min-height:auto; }
-    .svc-modal-img { padding:1.25rem; height:240px; }
-    .svc-modal-info { padding:1.5rem 1.5rem 1.25rem; }
-    .svc-modal-title { font-size:1.45rem; }
-    .svc-modal-actions { flex-wrap:wrap; }
-    .svc-modal-cta { width:100%; order:-1; }
+    #svcModal { padding:0.75rem; align-items:flex-start; padding-top:2.5rem; }
+    .svc-modal-inner { height:auto; max-height:calc(100vh - 3rem); border-radius:6px; }
+    .svc-modal-grid { grid-template-columns:1fr; grid-template-rows:auto 1fr; min-height:0; max-height:none; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+    .svc-modal-img { padding:1rem; height:200px; min-height:200px; flex-shrink:0; }
+    .svc-modal-info { padding:1.25rem 1.25rem 1.25rem; overflow:visible; }
+    .svc-modal-scroll { overflow-y:visible; flex:0 0 auto; }
+    .svc-modal-title { font-size:1.35rem; line-height:1.25; }
+    .svc-modal-desc { font-size:0.88rem; line-height:1.65; }
+    .svc-modal-actions { flex-direction:column; gap:0.5rem; align-items:stretch; }
+    .svc-modal-cta { width:100%; order:-1; padding:0.85rem; }
+    .svc-modal-nav { width:100%; padding:0.7rem; }
   }
 
   /* FLOATING CTA BUTTON */
-  #floatingCta { position:fixed; bottom:24px; right:24px; z-index:9000; background:var(--accent); color:#fff; padding:0.85rem 1.5rem; border:none; border-radius:50px; font-family:var(--sans); font-size:0.78rem; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; box-shadow:0 6px 20px rgba(6,17,29,0.35), 0 2px 6px rgba(6,17,29,0.2); display:none; align-items:center; gap:0.5rem; transition:transform 0.2s, background 0.2s, box-shadow 0.2s; opacity:0; transform:translateY(12px); }
+  #floatingCta { position:fixed; bottom:24px; right:24px; z-index:9000; background:var(--accent); color:#fff; padding:0.85rem 1.5rem; border:none; border-radius:50px; font-family:var(--sans); font-size:0.78rem; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; box-shadow:0 6px 20px rgba(6,17,29,0.35), 0 2px 6px rgba(6,17,29,0.2); display:none; align-items:center; gap:0.5rem; transition:transform 0.2s, background 0.2s, box-shadow 0.2s; opacity:0; transform:translateY(12px); white-space:nowrap; }
   #floatingCta.visible { display:inline-flex; opacity:1; transform:translateY(0); }
   #floatingCta:hover { background:var(--accent-dark); transform:translateY(-2px); box-shadow:0 10px 26px rgba(6,17,29,0.45); }
-  #floatingCta svg { width:14px; height:14px; }
+  #floatingCta svg { width:14px; height:14px; flex-shrink:0; }
+  #floatingCta .fab-label { display:inline; }
   @media (max-width: 600px) {
-    #floatingCta { bottom:16px; right:16px; padding:0.75rem 1.2rem; font-size:0.72rem; }
+    #floatingCta { bottom:18px; right:18px; padding:0; width:54px; height:54px; min-width:54px; border-radius:50%; justify-content:center; gap:0; }
+    #floatingCta .fab-label { display:none; }
+    #floatingCta svg { width:22px; height:22px; }
   }
 
   /* QUOTE MODAL */
@@ -273,6 +295,16 @@
 
   /* ANIMATIONS */
   @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Reveal-on-scroll */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1); will-change: opacity, transform; }
+  .reveal.is-visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.08s; }
+  .reveal-delay-2 { transition-delay: 0.16s; }
+  .reveal-delay-3 { transition-delay: 0.24s; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal-delay-1, .reveal-delay-2, .reveal-delay-3 { opacity: 1; transform: none; transition: none; }
+  }
   .hero-eyebrow { animation: fadeUp 0.5s ease both; }
   .hero-title { animation: fadeUp 0.5s 0.1s ease both; }
   .hero-desc { animation: fadeUp 0.5s 0.2s ease both; }
@@ -302,9 +334,10 @@
     .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
     .cta-container { flex-direction: column; text-align: center; }
     .cta-left { flex-direction: column; text-align: center; }
-    nav { padding: 0 1.5rem; height: auto; padding-top: 0.85rem; padding-bottom: 0.85rem; flex-direction: column; gap: 0.75rem; }
-    .nav-right { flex-direction: column; gap: 0.85rem; }
-    .nav-links { gap: 1.25rem; flex-wrap: wrap; justify-content: center; }
+    nav { padding: 0 1.5rem; height: auto; padding-top: 0.85rem; padding-bottom: 0.85rem; flex-direction: column; gap: 0.75rem; align-items: center; justify-content: center; }
+    .nav-logo { text-align: center; }
+    .nav-right { flex-direction: column; gap: 0.85rem; align-items: center; width: 100%; }
+    .nav-links { gap: 1.25rem; flex-wrap: wrap; justify-content: center; padding: 0; margin: 0; }
     body { padding-top: 30px; }
     .portfolio-header { flex-direction: column; align-items: flex-start; }
   }
@@ -318,20 +351,23 @@
   @media (max-width: 768px) {
     #lightbox > div {
       flex-direction: column !important;
+      height: 100% !important;
     }
     #lightbox > div > div:first-child {
       width: 100% !important;
-      height: 50vh !important;
+      height: 38vh !important;
       flex-shrink: 0;
     }
     #lightbox > div > div:last-child {
       width: 100% !important;
-      flex-shrink: 0;
-      max-height: 50vh;
+      flex: 1 1 auto !important;
+      min-height: 0;
+      max-height: none;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       border-left: none !important;
       border-top: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 1rem;
     }
     #lbDots {
       bottom: auto !important;
@@ -346,6 +382,15 @@
     #lbCounter {
       font-size: 0.7rem;
     }
+    /* Hide left/right large arrows on mobile — use swipe/dots */
+    #lbPrev, #lbNext {
+      width: 36px !important;
+      height: 36px !important;
+      font-size: 20px !important;
+    }
+    /* Smaller title on mobile */
+    #lbTitle { font-size: 1.15rem !important; }
+    #lbDesc { font-size: 0.82rem !important; line-height: 1.65 !important; }
   }
 
 </style>
@@ -359,8 +404,8 @@
       <li><a href="#services">Services</a></li>
       <li><a href="#how-it-works">Process</a></li>
       <li><a href="#portfolio">Work</a></li>
-      <li><a href="#about">Why Me</a></li>
-      <li><a href="#contact">About</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
     </ul>
     <a href="#" class="nav-cta" onclick="event.preventDefault();openQuote()">Get a Quote</a>
   </div>
@@ -445,6 +490,7 @@
           <img src="https://cdn.jsdelivr.net/gh/orlandoarguetapuerto-ship-it/porfolio@main/Full_set.png" alt="Full Set" onerror="this.style.opacity='0.3'">
         </div>
         <div class="svc-price">Starting at $575</div>
+        <div class="svc-see-more">See more &raquo;</div>
       </div>
 
       <div class="svc-card" data-svc="1" onclick="openSvcModal(1)">
@@ -454,6 +500,7 @@
           <img src="https://cdn.jsdelivr.net/gh/orlandoarguetapuerto-ship-it/porfolio@main/Floor_plan+Cover_sheet.png" alt="Floor Plan + Cover Sheet" onerror="this.style.opacity='0.3'">
         </div>
         <div class="svc-price">Starting at $375</div>
+        <div class="svc-see-more">See more &raquo;</div>
       </div>
 
       <div class="svc-card" data-svc="2" onclick="openSvcModal(2)">
@@ -463,6 +510,7 @@
           <img src="https://cdn.jsdelivr.net/gh/orlandoarguetapuerto-ship-it/porfolio@main/Electrical_Plan.png" alt="Electrical Plan" onerror="this.style.opacity='0.3'">
         </div>
         <div class="svc-price">Starting at $105</div>
+        <div class="svc-see-more">See more &raquo;</div>
       </div>
 
       <div class="svc-card" data-svc="3" onclick="openSvcModal(3)">
@@ -472,6 +520,7 @@
           <img src="https://cdn.jsdelivr.net/gh/orlandoarguetapuerto-ship-it/porfolio@main/RCP.png" alt="Reflected Ceiling Plan" onerror="this.style.opacity='0.3'">
         </div>
         <div class="svc-price">Starting at $105</div>
+        <div class="svc-see-more">See more &raquo;</div>
       </div>
 
       <div class="svc-card" data-svc="4" onclick="openSvcModal(4)">
@@ -481,6 +530,7 @@
           <img src="https://cdn.jsdelivr.net/gh/orlandoarguetapuerto-ship-it/porfolio@main/HVAC_Plan.png" alt="HVAC Plan" onerror="this.style.opacity='0.3'">
         </div>
         <div class="svc-price">Starting at $105</div>
+        <div class="svc-see-more">See more &raquo;</div>
       </div>
 
       <div class="svc-card" data-svc="5" onclick="openSvcModal(5)">
@@ -490,6 +540,7 @@
           <img src="https://cdn.jsdelivr.net/gh/orlandoarguetapuerto-ship-it/porfolio@main/Elevations.png" alt="Elevations" onerror="this.style.opacity='0.3'">
         </div>
         <div class="svc-price">Contact for pricing</div>
+        <div class="svc-see-more">See more &raquo;</div>
       </div>
 
       <div class="svc-card" data-svc="6" onclick="openSvcModal(6)">
@@ -499,6 +550,7 @@
           <img src="https://cdn.jsdelivr.net/gh/orlandoarguetapuerto-ship-it/porfolio@main/Large_Format.png" alt="Large Format Survey" onerror="this.style.opacity='0.3'">
         </div>
         <div class="svc-price">Contact for pricing</div>
+        <div class="svc-see-more">See more &raquo;</div>
       </div>
 
     </div>
@@ -684,34 +736,24 @@
   <div class="about-container">
     <div class="about-grid">
       <div>
-        <p class="about-eyebrow">Why Work With Me</p>
-        <h2 class="about-title">Accurate. Fast. Built for construction.</h2>
-        <ul class="about-list">
-          <li>
-            <span class="about-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-            <span>Licensed Architect with +3 yrs experience in architecture, design, PM &amp; survey</span>
-          </li>
-          <li>
-            <span class="about-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-            <span>International experience with U.S. firms</span>
-          </li>
-          <li>
-            <span class="about-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-            <span>4-day turnaround for spaces under 5K sqft</span>
-          </li>
-          <li>
-            <span class="about-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-            <span>30% lower cost vs. U.S.-based drafters</span>
-          </li>
-          <li>
-            <span class="about-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-            <span>CST timezone — U.S. hours, direct communication</span>
-          </li>
-          <li>
-            <span class="about-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-            <span>Focused on banking &amp; retail projects</span>
-          </li>
-        </ul>
+        <p class="about-eyebrow">About Me</p>
+        <h2 class="about-title">A licensed Architect who treats every drawing like construction depends on it.</h2>
+        <p class="about-bio">I'm Orlando Argueta — a licensed Architect based in Tegucigalpa, Honduras, with three years of professional experience in as-built survey documentation, Scan to BIM workflows, project management, and construction administration. My work has supported A&amp;E firms across the United States, including projects with Trileaf Corporation and national brands in banking, retail, food service, and specialty environments.</p>
+        <p class="about-bio">What sets my work apart isn't just speed — it's the architectural eye behind every line. I don't just trace point clouds; I read them. I understand how walls connect, where mechanical systems route, and what your contractor will actually need on-site. Operating on Central Standard Time means real-time collaboration with your team — same business hours, direct line of contact, and drawings that ship with fewer revisions and fewer surprises.</p>
+        <div class="about-pillars">
+          <div class="about-pillar">
+            <div class="about-pillar-num">3+</div>
+            <div class="about-pillar-label">Years of professional architecture &amp; survey experience</div>
+          </div>
+          <div class="about-pillar">
+            <div class="about-pillar-num">85+</div>
+            <div class="about-pillar-label">Projects delivered annually for U.S. clients</div>
+          </div>
+          <div class="about-pillar">
+            <div class="about-pillar-num">CST</div>
+            <div class="about-pillar-label">U.S. business-hours availability, direct line of contact</div>
+          </div>
+        </div>
       </div>
       <div>
         <p class="tools-eyebrow">Tools I Use</p>
@@ -851,7 +893,7 @@
 <!-- FLOATING CTA BUTTON -->
 <button id="floatingCta" onclick="openQuote()" aria-label="Get a Quote">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-  Get a Quote
+  <span class="fab-label">Get a Quote</span>
 </button>
 
 <footer style="background:#111110;padding:2rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
@@ -873,9 +915,11 @@
         <span id="svcModalNum" class="svc-modal-num"></span>
         <h3 id="svcModalTitle" class="svc-modal-title"></h3>
         <div class="svc-modal-divider"></div>
-        <p id="svcModalDesc" class="svc-modal-desc"></p>
-        <div id="svcModalDeliverable" class="svc-modal-deliverable"></div>
-        <div id="svcModalPrice" class="svc-modal-price"></div>
+        <div class="svc-modal-scroll">
+          <p id="svcModalDesc" class="svc-modal-desc"></p>
+          <div id="svcModalDeliverable" class="svc-modal-deliverable"></div>
+          <div id="svcModalPrice" class="svc-modal-price"></div>
+        </div>
         <div class="svc-modal-actions">
           <button id="svcModalPrev" class="svc-modal-nav" onclick="event.stopPropagation();navSvcModal(-1)">&#8249; Previous</button>
           <button class="svc-modal-cta" onclick="event.stopPropagation();closeSvcModal();openQuote();">Get a Quote</button>
@@ -1615,6 +1659,8 @@ function renderSvcModal() {
   document.getElementById('svcModalPrice').textContent = s.price;
   document.getElementById('svcModalCounter').textContent = `${currentSvcIdx + 1} / ${SERVICES_DATA.length}`;
   // Reset scroll
+  const scroll = document.querySelector('.svc-modal-scroll');
+  if (scroll) scroll.scrollTop = 0;
   const info = document.querySelector('.svc-modal-info');
   if (info) info.scrollTop = 0;
 }
@@ -1753,6 +1799,41 @@ function submitQuote() {
     btn.textContent = 'Send Quote Request'; btn.disabled = false;
   });
 }
+
+// REVEAL ON SCROLL — Apply fade-up to major sections/blocks
+(function() {
+  // Selectors of elements that should fade in on scroll
+  const targets = document.querySelectorAll(
+    '#services .services-intro, #services .svc-card, ' +
+    '#how-it-works .hiw-step, #how-it-works .hiw-features, #how-it-works .hiw-eyebrow, #how-it-works .hiw-title, ' +
+    '#portfolio .portfolio-header, #portfolio .pc, ' +
+    '#about .about-eyebrow, #about .about-title, #about .about-bio, #about .about-pillar, #about .tools-eyebrow, #about .tools-grid, ' +
+    '#testimonials .testimonial, ' +
+    '#cta-banner, ' +
+    '.svc-card'
+  );
+  targets.forEach((el, i) => {
+    el.classList.add('reveal');
+    if (i % 3 === 1) el.classList.add('reveal-delay-1');
+    else if (i % 3 === 2) el.classList.add('reveal-delay-2');
+  });
+
+  if (!('IntersectionObserver' in window)) {
+    targets.forEach(el => el.classList.add('is-visible'));
+    return;
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  targets.forEach(el => io.observe(el));
+})();
 </script>
 </body>
 </html>
