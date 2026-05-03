@@ -393,6 +393,467 @@
     #lbDesc { font-size: 0.82rem !important; line-height: 1.65 !important; }
   }
 
+  /* ============================================================
+     MOBILE FIXES — only apply on small screens (≤ 700px)
+     Desktop layout remains untouched.
+     ============================================================ */
+  @media (max-width: 700px) {
+
+    /* Prevent horizontal overflow site-wide */
+    html, body {
+      overflow-x: hidden;
+      max-width: 100%;
+    }
+
+    /* ---- NAV ---- */
+    nav {
+      padding: 0.6rem 1rem !important;
+      height: auto !important;
+      flex-direction: column !important;
+      gap: 0.6rem !important;
+      align-items: center !important;
+    }
+    .nav-logo {
+      font-size: 1.15rem !important;
+      text-align: center;
+    }
+    .nav-right {
+      flex-direction: column !important;
+      gap: 0.6rem !important;
+      width: 100%;
+      align-items: center !important;
+    }
+    .nav-links {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      justify-content: center !important;
+      gap: 0.5rem 1rem !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      width: 100%;
+    }
+    .nav-links li {
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.68rem !important;
+      letter-spacing: 0.08em !important;
+      white-space: nowrap;
+    }
+    .nav-cta {
+      font-size: 0.68rem !important;
+      padding: 0.55rem 1.2rem !important;
+      letter-spacing: 0.08em !important;
+    }
+
+    /* Body padding to clear the now-taller fixed nav */
+    body {
+      padding-top: 0 !important;
+    }
+    .hero {
+      padding-top: 11rem !important;
+    }
+
+    /* ---- HERO ---- */
+    .hero {
+      grid-template-columns: 1fr !important;
+      gap: 2.5rem !important;
+      padding: 11rem 1.25rem 2.5rem !important;
+    }
+    .hero-title {
+      font-size: 2.4rem !important;
+      line-height: 1.1 !important;
+    }
+    .hero-desc {
+      font-size: 0.95rem !important;
+      max-width: 100% !important;
+    }
+    .hero-stats {
+      grid-template-columns: 1fr 1fr !important;
+      gap: 1.75rem 1.25rem !important;
+    }
+    .h-stat-num {
+      font-size: 1.85rem !important;
+    }
+    .hero-scope {
+      padding: 0.85rem 1rem !important;
+    }
+    .hero-scope-text strong {
+      font-size: 0.85rem !important;
+    }
+    .hero-scope-text span {
+      font-size: 0.74rem !important;
+    }
+    .hero-cta {
+      flex-direction: column !important;
+      gap: 0.6rem !important;
+      width: 100%;
+    }
+    .hero-cta a {
+      width: 100%;
+      text-align: center;
+      box-sizing: border-box;
+    }
+    .hero-images {
+      grid-template-columns: 1fr !important;
+      gap: 1rem !important;
+    }
+    .hero-images::before {
+      display: none !important;
+    }
+    .hero-img-card {
+      min-height: 0 !important;
+      height: auto !important;
+      aspect-ratio: 4/3 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    .hero-img-card img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+    }
+
+    /* ---- SERVICES SECTION ---- */
+    #services {
+      padding: 3.5rem 1.25rem !important;
+    }
+    .services-container {
+      grid-template-columns: 1fr !important;
+      gap: 2rem !important;
+    }
+    .services-intro h2 {
+      font-size: 1.7rem !important;
+    }
+    .services-grid {
+      grid-template-columns: 1fr 1fr !important;
+      gap: 0.75rem !important;
+    }
+    .svc-card {
+      min-height: auto !important;
+      padding: 1rem 0.85rem !important;
+    }
+    .svc-name {
+      font-size: 0.9rem !important;
+      min-height: 2.4em !important;
+    }
+    .svc-img-wrap {
+      min-height: 140px !important;
+    }
+    .svc-img-wrap img {
+      max-height: 160px !important;
+    }
+    .svc-price {
+      font-size: 0.85rem !important;
+    }
+    .svc-num {
+      font-size: 0.7rem !important;
+    }
+
+    /* ---- SERVICE DETAIL MODAL ---- */
+    #svcModal {
+      padding: 0 !important;
+      align-items: stretch !important;
+    }
+    .svc-modal-inner {
+      max-width: 100% !important;
+      width: 100% !important;
+      height: 100vh !important;
+      max-height: 100vh !important;
+      border-radius: 0 !important;
+    }
+    .svc-modal-grid {
+      grid-template-columns: 1fr !important;
+      grid-template-rows: 220px 1fr !important;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+    }
+    .svc-modal-img {
+      padding: 1rem !important;
+      height: 220px !important;
+      min-height: 220px !important;
+    }
+    .svc-modal-info {
+      padding: 1.25rem 1.25rem 5.5rem !important;
+      overflow: visible !important;
+    }
+    .svc-modal-scroll {
+      overflow-y: visible !important;
+      flex: 0 0 auto !important;
+    }
+    .svc-modal-title {
+      font-size: 1.3rem !important;
+      line-height: 1.25 !important;
+    }
+    .svc-modal-desc {
+      font-size: 0.88rem !important;
+    }
+    .svc-modal-actions {
+      flex-direction: column !important;
+      gap: 0.5rem !important;
+      align-items: stretch !important;
+      position: sticky;
+      bottom: 0;
+      background: #fff;
+      padding: 0.75rem 0 0 !important;
+      margin-top: 0.5rem !important;
+    }
+    .svc-modal-cta {
+      width: 100% !important;
+      order: -1 !important;
+      padding: 0.85rem !important;
+    }
+    .svc-modal-nav {
+      width: 100% !important;
+      padding: 0.7rem !important;
+    }
+
+    /* ---- HOW IT WORKS ---- */
+    #how-it-works {
+      padding: 3.5rem 1.25rem !important;
+    }
+    .hiw-title {
+      font-size: 1.75rem !important;
+      margin-bottom: 2.5rem !important;
+    }
+    .hiw-steps {
+      grid-template-columns: 1fr !important;
+      gap: 2rem !important;
+    }
+    .hiw-steps::before {
+      display: none !important;
+    }
+    .hiw-features {
+      grid-template-columns: 1fr !important;
+      gap: 0.85rem !important;
+      padding: 1.25rem !important;
+    }
+
+    /* ---- PORTFOLIO ---- */
+    #portfolio {
+      padding: 3.5rem 1.25rem !important;
+    }
+    .portfolio-header {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 1.25rem !important;
+    }
+    .portfolio-title {
+      font-size: 1.75rem !important;
+    }
+    #portfolioGrid {
+      grid-template-columns: 1fr !important;
+      gap: 1rem !important;
+    }
+    #allProjectsGrid {
+      grid-template-columns: 1fr !important;
+    }
+
+    /* ---- ABOUT ---- */
+    #about {
+      padding-left: 1.25rem !important;
+      padding-right: 1.25rem !important;
+    }
+    .about-grid {
+      grid-template-columns: 1fr !important;
+      gap: 2.5rem !important;
+    }
+    .about-grid::before {
+      display: none !important;
+    }
+    .tools-grid {
+      padding-left: 0 !important;
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 1.5rem 1rem !important;
+    }
+    .tools-title {
+      font-size: 1.55rem !important;
+    }
+
+    /* ---- TESTIMONIALS ---- */
+    #testimonials {
+      padding: 0 1.25rem 3.5rem !important;
+    }
+    .testimonials-grid {
+      grid-template-columns: 1fr !important;
+      gap: 1rem !important;
+    }
+    .testimonial {
+      padding: 1.4rem !important;
+    }
+
+    /* ---- CTA BANNER ---- */
+    #cta-banner {
+      padding: 2rem 1.25rem !important;
+    }
+    .cta-container {
+      flex-direction: column !important;
+      text-align: center !important;
+      gap: 1.5rem !important;
+    }
+    .cta-left {
+      flex-direction: column !important;
+      text-align: center !important;
+      gap: 0.85rem !important;
+    }
+    .cta-text h3 {
+      font-size: 0.95rem !important;
+    }
+    .cta-text p {
+      font-size: 0.78rem !important;
+    }
+    .cta-buttons {
+      width: 100%;
+      flex-direction: column !important;
+    }
+    .cta-buttons a {
+      width: 100%;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    /* ---- CONTACT (FOOTER) ---- */
+    #contact {
+      padding: 2.5rem 1.25rem 1.5rem !important;
+    }
+    .contact-grid {
+      grid-template-columns: 1fr !important;
+      gap: 2rem !important;
+      padding-bottom: 1.5rem !important;
+    }
+    .contact-brand h4 {
+      font-size: 1.25rem !important;
+    }
+    .contact-col li {
+      font-size: 0.85rem !important;
+      word-break: break-word;
+    }
+    .contact-col a {
+      word-break: break-all;
+    }
+    .contact-bottom {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 0.5rem !important;
+      text-align: left !important;
+    }
+
+    /* ---- CONTACT SECTION (uses inline styles — target structurally) ---- */
+    #contact > div {
+      padding: 0 1.25rem !important;
+    }
+    /* The two-column grid wrapper inside #contact */
+    #contact > div > div:nth-child(2) {
+      grid-template-columns: 1fr !important;
+      gap: 2.5rem !important;
+    }
+    /* Contact items list — make labels and values stack on tight screens */
+    #contact ul li {
+      flex-wrap: wrap !important;
+      gap: 0.4rem 1rem !important;
+      padding: 0.85rem 0 !important;
+      font-size: 0.85rem !important;
+    }
+    #contact ul li > span:first-child {
+      min-width: auto !important;
+      flex-basis: 100% !important;
+      font-size: 0.66rem !important;
+    }
+    #contact ul li > span:last-child {
+      width: 100% !important;
+      word-break: break-word !important;
+    }
+    #contact ul li a {
+      word-break: break-word !important;
+    }
+    /* Reduce the "Start your project today" heading on mobile */
+    #contact > div > div:nth-child(2) > div:first-child > p:first-of-type {
+      font-size: 1.4rem !important;
+    }
+    /* Section header padding fix */
+    #contact > div > div:first-child {
+      margin-bottom: 2.5rem !important;
+    }
+    /* Section title smaller */
+    #contact h2 {
+      font-size: 1.7rem !important;
+    }
+
+    /* Footer adjustments */
+    footer {
+      padding: 1.5rem 1.25rem !important;
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 0.5rem !important;
+      text-align: left !important;
+    }
+    footer span {
+      font-size: 0.75rem !important;
+    }
+
+    /* ---- QUOTE MODAL ---- */
+    #quoteModal {
+      padding: 0 !important;
+      align-items: stretch !important;
+    }
+    .quote-inner {
+      max-width: 100% !important;
+      width: 100% !important;
+      max-height: 100vh !important;
+      border-radius: 0 !important;
+    }
+    .quote-header {
+      padding: 1.5rem 1.25rem 1rem !important;
+    }
+    .quote-header h3 {
+      font-size: 1.4rem !important;
+    }
+    .quote-body {
+      padding: 1.25rem !important;
+    }
+    .q-row {
+      grid-template-columns: 1fr !important;
+      gap: 0 !important;
+    }
+
+    /* ---- FLOATING CTA — already handled but ensure visibility ---- */
+    #floatingCta {
+      bottom: 16px !important;
+      right: 16px !important;
+    }
+
+    /* ---- LIGHTBOX additional fixes ---- */
+    #lightbox {
+      padding: 0 !important;
+    }
+  }
+
+  /* Extra-narrow phones (≤ 380px) */
+  @media (max-width: 380px) {
+    .hero-title {
+      font-size: 2rem !important;
+    }
+    .hero-stats {
+      grid-template-columns: 1fr 1fr !important;
+      gap: 1.25rem 1rem !important;
+    }
+    .h-stat-num {
+      font-size: 1.65rem !important;
+    }
+    .services-grid {
+      grid-template-columns: 1fr !important;
+    }
+    .svc-img-wrap {
+      min-height: 180px !important;
+    }
+    .svc-img-wrap img {
+      max-height: 200px !important;
+    }
+    .nav-links a {
+      font-size: 0.62rem !important;
+    }
+  }
+
 </style>
 </head>
 <body>
