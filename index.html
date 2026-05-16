@@ -2221,6 +2221,9 @@ function submitQuote() {
   btn.textContent = 'Sending...'; btn.disabled = true;
 
   const payload = {
+    access_key: 'fd030414-3acc-4ad9-8d3d-4f4b37e9c18f',
+    subject: 'Quote Request — ' + (company || name),
+    replyto: email,
     name, email, company,
     project_type: type || 'N/A',
     approx_sqft: sqft,
@@ -2228,20 +2231,19 @@ function submitQuote() {
     other_deliverables: otherText || '',
     survey_data: data || 'N/A',
     notes: notes || 'None',
-    _subject: 'Quote Request — ' + (company || name),
-    _replyto: email,
-    _captcha: 'false'
   };
 
-  fetch('https://formsubmit.co/ajax/oarguetapuerto@hotmail.com', {
+  fetch('https://api.web3forms.com/submit', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
     body: JSON.stringify(payload)
   })
   .then(res => res.json())
-  .then(() => {
-    document.getElementById('quoteFormView').style.display = 'none';
-    document.getElementById('quoteSuccessView').style.display = 'block';
+  .then((data) => {
+    if (data.success) {
+      document.getElementById('quoteFormView').style.display = 'none';
+      document.getElementById('quoteSuccessView').style.display = 'block';
+    }
     btn.textContent = 'Send Quote Request'; btn.disabled = false;
     document.getElementById('qName').value = '';
     document.getElementById('qEmail').value = '';
