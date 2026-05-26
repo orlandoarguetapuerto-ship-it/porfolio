@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>O. Argueta — As-Built Drafting & Survey Documentation</title>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YT6PSCKDZP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-YT6PSCKDZP');
+</script>
+
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1713,6 +1723,16 @@ function openLB(id) {
   document.getElementById('lbTags').innerHTML = p.tags.map(t => `<span style="font-size:.65rem;font-weight:500;padding:.2rem .55rem;border:1px solid rgba(255,255,255,0.12);border-radius:2px;color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.05);letter-spacing:.04em">${t}</span>`).join(' ');
   document.getElementById('lightbox').style.display = 'flex';
   document.body.style.overflow = 'hidden';
+  
+  // Google Analytics: Track project view
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'project_view', {
+      'project_name': p.title,
+      'project_id': p.id,
+      'project_category': p.category,
+      'project_sqft': p.sqft
+    });
+  }
 }
 
 function updateCarousel() {
@@ -1889,6 +1909,16 @@ async function downloadProject() {
     URL.revokeObjectURL(a.href);
 
     btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Downloaded!';
+    
+    // Google Analytics: Track portfolio download
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'portfolio_download', {
+        'project_name': name,
+        'project_id': currentProject.id,
+        'num_images': urls.length
+      });
+    }
+    
     setTimeout(() => {
       btn.innerHTML = '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" y1=\"15\" x2=\"12\" y2=\"3\"/></svg> Download all pages';
       btn.disabled = false;
@@ -2221,9 +2251,6 @@ function submitQuote() {
   btn.textContent = 'Sending...'; btn.disabled = true;
 
   const payload = {
-    access_key: 'fd030414-3acc-4ad9-8d3d-4f4b37e9c18f',
-    subject: 'Quote Request — ' + (company || name),
-    replyto: email,
     name, email, company,
     project_type: type || 'N/A',
     approx_sqft: sqft,
@@ -2231,19 +2258,20 @@ function submitQuote() {
     other_deliverables: otherText || '',
     survey_data: data || 'N/A',
     notes: notes || 'None',
+    _subject: 'Quote Request — ' + (company || name),
+    _replyto: email,
+    _captcha: 'false'
   };
 
-  fetch('https://api.web3forms.com/submit', {
+  fetch('https://formsubmit.co/ajax/oarguetapuerto@hotmail.com', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
     body: JSON.stringify(payload)
   })
   .then(res => res.json())
-  .then((data) => {
-    if (data.success) {
-      document.getElementById('quoteFormView').style.display = 'none';
-      document.getElementById('quoteSuccessView').style.display = 'block';
-    }
+  .then(() => {
+    document.getElementById('quoteFormView').style.display = 'none';
+    document.getElementById('quoteSuccessView').style.display = 'block';
     btn.textContent = 'Send Quote Request'; btn.disabled = false;
     document.getElementById('qName').value = '';
     document.getElementById('qEmail').value = '';
@@ -2297,6 +2325,67 @@ function submitQuote() {
 
   targets.forEach(el => io.observe(el));
 })();
+
+// ═══════════════════════════════════════════════════════════════
+// GOOGLE ANALYTICS - EVENT TRACKING
+// ═══════════════════════════════════════════════════════════════
+
+if (typeof gtag !== 'undefined') {
+  // Track email clicks
+  document.querySelectorAll('a[href^="mailto:"]').forEach(link => {
+    link.addEventListener('click', function() {
+      gtag('event', 'contact_email_click', {
+        'email': this.href.replace('mailto:', '')
+      });
+    });
+  });
+
+  // Track navigation clicks
+  document.querySelectorAll('nav a, .nav-links a').forEach(link => {
+    link.addEventListener('click', function() {
+      const text = this.textContent.trim();
+      const href = this.getAttribute('href') || '';
+      if (href.startsWith('#')) {
+        gtag('event', 'navigation_click', {
+          'section': text,
+          'anchor': href
+        });
+      }
+    });
+  });
+
+  // Track CTA button clicks
+  document.querySelectorAll('.hero-cta a, .nav-cta, .btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const text = this.textContent.trim();
+      gtag('event', 'cta_click', {
+        'button_text': text,
+        'button_location': this.closest('section')?.id || 'unknown'
+      });
+    });
+  });
+
+  // Track filter changes in portfolio
+  document.querySelectorAll('#filterBar .filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const filter = this.textContent.trim();
+      gtag('event', 'portfolio_filter', {
+        'filter_category': filter
+      });
+    });
+  });
+
+  // Track quote request form submission
+  const quoteForm = document.querySelector('#quoteModal form');
+  if (quoteForm) {
+    quoteForm.addEventListener('submit', function() {
+      gtag('event', 'quote_request_submitted', {
+        'form_type': 'quote_modal'
+      });
+    });
+  }
+}
+
 </script>
 </body>
 </html>
